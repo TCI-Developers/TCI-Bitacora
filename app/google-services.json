@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "259874438076",
+    "firebase_url": "https://datostci.firebaseio.com",
+    "project_id": "datostci",
+    "storage_bucket": "datostci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:259874438076:android:e807d56aea2d0195",
+        "android_client_info": {
+          "package_name": "com.tci.consultoria.tcibitacora"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "259874438076-9tkfu3afmq53fn3t9kf5risggc399gvl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj285mGEWLlMXX6EhoehF7nXWJhPFTrdo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
