@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#5DADE2</color>
+    <color name="colorPrimary">#6dbef3</color>
+    <color name="colorPrimaryDark">#001F5F</color>
+    <color name="colorAccent">#1b5174</color>
     <color name="Blanco">#FFFFFF</color>
 
-    <color name="amarillo">#F4D03F</color>
+    <color name="fondo">#ededed</color>
     <color name="lightGrayLine">#ededed</color>
-    <color name="morado">#A569BD</color>
-    <color name="colorRed">#ff3943</color>
-    <color name="colorGrennDark">#3eb959</color>
+
 </resources>

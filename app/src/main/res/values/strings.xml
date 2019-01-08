@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">TCI Bitacora</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_reporte_actividades">ReporteActividades</string>
+
+    <string name="title_activity_reporte_actividades">Reporte de actividades</string>
+    <string name="title_activity_cargar_actividades">Cargar actividades</string>
+    <string name="title_activity_agregar_actividad">Agregar actividad</string>
+
+    <string name="hint_alert_etxt_FechaInicio">Fecha inicio</string>
+    <string name="hint_alert_etxt_FechaFin">Fecha fin</string>
+    <string name="hint_agregar_actividad_act_realiza">Actividad realizada</string>7
+    <string name="hint_agregar_actividad_viaticos">Viáticos</string>
+    <string name="txt_rango">Ingresa rango de fecha:</string>
+    <string name="btn_cargar_actividades">Cargar actividades</string>
+    <string name="btn_agregar_actividad">Agregar actividad</string>
+
+
+
+    <string-array name="Opciones">
+        <item>SELEC. OPCIÓN</item>
+        <item>Tarea 1</item>
+        <item>Tarea 2</item>
+        <item>Tarea 3</item>
+    </string-array>
+
 </resources>

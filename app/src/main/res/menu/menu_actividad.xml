@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.tci.consultoria.tcibitacora.MainActivity">
+    <item android:id="@+id/btn_foto"
+        android:icon="@drawable/ic_camara"
+        app:showAsAction="ifRoom"
+        android:title="delete"/>
+
+    <item android:id="@+id/btn_agregar"
+        android:icon="@drawable/ic_addactividad"
+        app:showAsAction="ifRoom"
+        android:title="delete"/>
+</menu>
