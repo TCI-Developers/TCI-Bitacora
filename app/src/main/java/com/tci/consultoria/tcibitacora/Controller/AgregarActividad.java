@@ -1,13 +1,11 @@
 package com.tci.consultoria.tcibitacora.Controller;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +22,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class AgregarActividad extends AppCompatActivity {
     ImageView imgPhoto;
+    PhotoViewAttacher photoViewAttacher = null;
     static final int REQUEST_TAKE_PHOTO = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +36,19 @@ public class AgregarActividad extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
+        imgPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                            zoom(true);
+                    }
+                },500);
+            }
+        });
+
     }
 
     @Override
@@ -63,6 +76,7 @@ public class AgregarActividad extends AppCompatActivity {
 
     public void init(){
         imgPhoto = findViewById(R.id.imgPhoto);
+        photoViewAttacher = new PhotoViewAttacher(imgPhoto);
     }
 
     public static String mCurrentPhotoPath;
@@ -107,6 +121,7 @@ public class AgregarActividad extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             try {
+                zoom(false);
                 mostrarPhoto();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -120,6 +135,9 @@ public class AgregarActividad extends AppCompatActivity {
                 .into(imgPhoto);
     }
 
+    public void zoom(Boolean ban){
+        photoViewAttacher.setZoomable(ban);
+    }
 
 
 }
