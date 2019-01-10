@@ -6,28 +6,44 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.tci.consultoria.tcibitacora.Modelos.Opciones;
 import com.tci.consultoria.tcibitacora.R;
+import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
+
 public class AgregarActividad extends AppCompatActivity {
     ImageView imgPhoto;
+    Spinner spnOpcion;
     PhotoViewAttacher photoViewAttacher = null;
     static final int REQUEST_TAKE_PHOTO = 1;
+    List<Opciones> listaOpciones = new ArrayList<Opciones>();
+    ArrayAdapter<Opciones> arrayAdapterPersona;
+    Principal p = Principal.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +93,9 @@ public class AgregarActividad extends AppCompatActivity {
     public void init(){
         imgPhoto = findViewById(R.id.imgPhoto);
         photoViewAttacher = new PhotoViewAttacher(imgPhoto);
+        spnOpcion = findViewById(R.id.spnOpcion);
+
+        llenarSpinner();
     }
 
     public static String mCurrentPhotoPath;
@@ -137,6 +156,27 @@ public class AgregarActividad extends AppCompatActivity {
 
     public void zoom(Boolean ban){
         photoViewAttacher.setZoomable(ban);
+    }
+
+    public void llenarSpinner(){
+        p.databaseReference.child("Bitacora")
+                .child(EMPRESA)
+                .child("actividades").child("opciones").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listaOpciones.clear();
+                for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
+                    Opciones opc = objSnapshot.getValue(Opciones.class);
+                    listaOpciones.add(opc);
+                    arrayAdapterPersona = new ArrayAdapter<Opciones>(
+                            AgregarActividad.this,android.R.layout.simple_spinner_item,listaOpciones);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

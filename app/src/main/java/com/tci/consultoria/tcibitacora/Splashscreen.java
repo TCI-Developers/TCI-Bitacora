@@ -1,5 +1,6 @@
 package com.tci.consultoria.tcibitacora;
 
+
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +11,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tci.consultoria.tcibitacora.Singleton.Principal;
+
 public class Splashscreen extends AppCompatActivity {
 
     ImageView imgv_logo;
     TextView textView1,textView2,textView3,textView4;
+    Principal principal = Principal.getInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,8 +27,12 @@ public class Splashscreen extends AppCompatActivity {
         fullscreen();
         init();
         animar();
+        try{
+            principal.InicializarFirebase();
+        }catch (Exception e){
 
-       final Intent intentSplash = new Intent(Splashscreen.this,MainActivity.class);
+        }
+       final Intent intentSplash = new Intent(Splashscreen.this,Login.class);
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -34,12 +44,11 @@ public class Splashscreen extends AppCompatActivity {
                 finally {
                     startActivity(intentSplash);
                     finish();
-
                 }
             }
         }; thread.start();
-
     }
+
     public void init(){
         imgv_logo = findViewById(R.id.imgv_logo);
         textView1 = findViewById(R.id.text1);
