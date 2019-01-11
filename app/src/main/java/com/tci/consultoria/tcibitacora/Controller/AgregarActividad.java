@@ -16,12 +16,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.tci.consultoria.tcibitacora.Modelos.Opciones;
+import com.tci.consultoria.tcibitacora.Modelos.opciones;
 import com.tci.consultoria.tcibitacora.R;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
@@ -39,10 +40,12 @@ import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 public class AgregarActividad extends AppCompatActivity {
     ImageView imgPhoto;
     Spinner spnOpcion;
+    TextView txtActividad;
     PhotoViewAttacher photoViewAttacher = null;
     static final int REQUEST_TAKE_PHOTO = 1;
-    List<Opciones> listaOpciones = new ArrayList<Opciones>();
-    ArrayAdapter<Opciones> arrayAdapterPersona;
+    List<opciones> listaOpciones = new ArrayList<opciones>();
+    ArrayAdapter<opciones> arrayAdapterOpciones;
+    String nombreActividad="";
     Principal p = Principal.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +67,7 @@ public class AgregarActividad extends AppCompatActivity {
                 },500);
             }
         });
-
+        txtActividad.setText(nombreActividad);
     }
 
     @Override
@@ -94,8 +97,14 @@ public class AgregarActividad extends AppCompatActivity {
         imgPhoto = findViewById(R.id.imgPhoto);
         photoViewAttacher = new PhotoViewAttacher(imgPhoto);
         spnOpcion = findViewById(R.id.spnOpcion);
-
         llenarSpinner();
+        txtActividad = findViewById(R.id.txtActividad);
+        try{
+            nombreActividad = getIntent().getExtras().getString("actividad");
+        }catch (Exception e){
+            txtActividad.setVisibility(View.GONE);
+        }
+
     }
 
     public static String mCurrentPhotoPath;
@@ -116,7 +125,6 @@ public class AgregarActividad extends AppCompatActivity {
     }
 
     private void dispatchTakePictureIntent() {
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -161,15 +169,17 @@ public class AgregarActividad extends AppCompatActivity {
     public void llenarSpinner(){
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
-                .child("actividades").child("opciones").addValueEventListener(new ValueEventListener() {
+                .child("actividades").child("opciones")
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listaOpciones.clear();
                 for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
-                    Opciones opc = objSnapshot.getValue(Opciones.class);
+                    opciones opc = objSnapshot.getValue(opciones.class);
                     listaOpciones.add(opc);
-                    arrayAdapterPersona = new ArrayAdapter<Opciones>(
+                    arrayAdapterOpciones = new ArrayAdapter<opciones>(
                             AgregarActividad.this,android.R.layout.simple_spinner_item,listaOpciones);
+                    spnOpcion.setAdapter(arrayAdapterOpciones);
                 }
             }
             @Override

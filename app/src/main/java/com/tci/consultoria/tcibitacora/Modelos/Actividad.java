@@ -9,9 +9,37 @@ public class Actividad {
     private String nombre;
     private String path;
     private String razonSocial;
+    private Long record;
     private int status;
     private String url;
     private Double viaticos;
+
+    public Actividad() {
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
+    }
+
+    public Double getViaticos() {
+        return viaticos;
+    }
+
+    public void setViaticos(Double viaticos) {
+        this.viaticos = viaticos;
+    }
 
     public String getActRealizada() {
         return actRealizada;
@@ -35,22 +63,6 @@ public class Actividad {
 
     public void setHora(String hora) {
         this.hora = hora;
-    }
-
-    public Double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
     }
 
     public String getNombre() {
@@ -93,11 +105,4 @@ public class Actividad {
         this.url = url;
     }
 
-    public Double getViaticos() {
-        return viaticos;
-    }
-
-    public void setViaticos(Double viaticos) {
-        this.viaticos = viaticos;
-    }
 }
