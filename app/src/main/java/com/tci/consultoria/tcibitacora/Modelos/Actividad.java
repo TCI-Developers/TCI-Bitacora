@@ -10,6 +10,7 @@ public class Actividad {
     private String path;
     private String razonSocial;
     private Long record;
+    private String opcion;
     private int status;
     private String url;
     private Double viaticos;
@@ -104,5 +105,23 @@ public class Actividad {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public Long getRecord() {
+        return record;
+    }
+
+    public String getOpcion() {
+        return opcion;
+    }
+
+    public void setOpcion(String opcion) {
+        this.opcion = opcion;
+    }
+
+    public void setRecord(Long record) {
+        this.record = record;
+    }
+
+
 
 }

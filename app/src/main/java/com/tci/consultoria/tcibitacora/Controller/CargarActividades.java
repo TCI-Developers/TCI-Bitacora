@@ -45,7 +45,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     private SimpleDateFormat dateFormat;
     private RecyclerAct recyclerAct;
     private ArrayList<Actividad> listActividades = new ArrayList<Actividad>();
-    private ArrayList<Actividad> listFechaActividades = new ArrayList<Actividad>();
+    public static ArrayList<Actividad> listFechaActividades = new ArrayList<Actividad>();
     private ArrayList<String> UID = new ArrayList<>();
 
     Principal p = Principal.getInstance();
@@ -168,6 +168,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
         Intent intent = new Intent(CargarActividades.this,AgregarActividad.class);
         intent.putExtra("UID",UID.get(i));
         intent.putExtra("actividad","Nombre de actividad: "+listFechaActividades.get(i).getNombre());
+        intent.putExtra("posicion",i);
         startActivity(intent);
     }
 }

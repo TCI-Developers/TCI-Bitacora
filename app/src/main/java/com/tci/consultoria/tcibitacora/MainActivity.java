@@ -19,10 +19,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE = 1;
+    private boolean IMEIVALIDO= false;
+    public static boolean connected;
+    public static String rSOCIAL="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +67,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_tci);
-        init();
 
+        init();
+        validaInternet();
     }
     public void init(){
         card_CargarActividades = findViewById(R.id.card_CargarActividades);
@@ -73,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
         EMPRESA = p.firebaseAuth.getCurrentUser().getEmail();
         int pos = EMPRESA.indexOf("@");
         EMPRESA = EMPRESA.substring(0,pos);
-
+        razonSocial(EMPRESA);
+        veficaIMEI();
     }
 
     @Override
@@ -119,30 +126,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void intentCaragarActividades(View view){
-        Intent intent = new Intent(MainActivity.this,CargarActividades.class);
-        startActivity(intent);
+        if(IMEIVALIDO) {
+            Intent intent = new Intent(MainActivity.this, CargarActividades.class);
+            startActivity(intent);
+        }else{
+            Snackbar.make(view, "No tienes actividades.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void intentAgregarActividad(final View view){
-        p.databaseReference.child("Bitacora")
-                .child(EMPRESA)
-                .child("actividades").child("usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    if(snapshot.getKey().equals(myIMEI)){
-                        Intent intent = new Intent(MainActivity.this,AgregarActividad.class);
-                        startActivity(intent);
-                    }else{
-                        Snackbar.make(view, "No puedes ingresar actividades.", Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        if(IMEIVALIDO){
+            Intent intent = new Intent(MainActivity.this,AgregarActividad.class);
+            startActivity(intent);
+        }else {
+            Snackbar.make(view, "No puedes ingresar actividades.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public String getIMEI(){
@@ -164,8 +162,49 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void veficaIMEI(final View view){
+    public void veficaIMEI(){
+        p.databaseReference.child("Bitacora")
+                .child(EMPRESA)
+                .child("actividades").child("usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    if(snapshot.getKey().equals(myIMEI)){
+                        IMEIVALIDO = true;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    public void validaInternet(){
+        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                connected = snapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void razonSocial(String empresa){
+        switch (empresa){
+            case "arfi":
+                rSOCIAL = statics.RAZON_SOCIAL_GRUPO_ARFI;
+                break;
+            case "tci":
+                rSOCIAL = statics.RAZON_SOCIAL_TCI;
+                break;
+        }
     }
 
 

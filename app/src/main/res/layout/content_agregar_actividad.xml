@@ -98,6 +98,24 @@
                         android:layout_marginTop="8dp">
 
                         <android.support.design.widget.TextInputEditText
+                            android:id="@+id/txtNombreActividad"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/boxtext1"
+                            android:hint="@string/hint_agregar_actividad_nombre"
+                            android:inputType="textCapSentences"
+                            android:paddingLeft="8dp"
+                            android:textColorLink="@color/colorPrimary"
+                            android:textSize="12sp" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp">
+
+                        <android.support.design.widget.TextInputEditText
                             android:id="@+id/txtActividadRealizada"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -122,7 +140,7 @@
                             android:layout_marginTop="5dp"
                             android:background="@drawable/boxtext1"
                             android:hint="@string/hint_agregar_actividad_viaticos"
-                            android:inputType="textCapSentences"
+                            android:inputType="numberDecimal"
                             android:paddingLeft="8dp"
                             android:textColorLink="@color/colorPrimary"
                             android:textSize="12sp" />
