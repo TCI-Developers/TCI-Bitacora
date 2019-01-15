@@ -8,4 +8,8 @@
     tools:context=".Controller.ReporteActividades"
     tools:showIn="@layout/activity_reporte_actividades">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerActividades"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </android.support.constraint.ConstraintLayout>

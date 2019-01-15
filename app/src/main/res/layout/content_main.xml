@@ -74,6 +74,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:onClick="intentReporteActividades"
                 android:foreground="?android:attr/selectableItemBackground">
 
                 <LinearLayout

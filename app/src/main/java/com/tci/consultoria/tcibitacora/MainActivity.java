@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
+import com.tci.consultoria.tcibitacora.Controller.ReporteActividades;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
@@ -75,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
         card_CargarActividades = findViewById(R.id.card_CargarActividades);
         card_ReporteActividades = findViewById(R.id.card_ReporteActividades);
         card_AgregarActividad = findViewById(R.id.card_AgregarActividad);
-
-        EMPRESA = p.firebaseAuth.getCurrentUser().getEmail();
+        try {
+            EMPRESA = p.firebaseAuth.getCurrentUser().getEmail();
+        } catch(Exception e){}
         int pos = EMPRESA.indexOf("@");
         EMPRESA = EMPRESA.substring(0,pos);
         razonSocial(EMPRESA);
@@ -131,6 +133,14 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }else{
             Snackbar.make(view, "No tienes actividades.", Snackbar.LENGTH_LONG).show();
+        }
+    }
+    public void intentReporteActividades(View view){
+        if(IMEIVALIDO){
+            Intent intent = new Intent(MainActivity.this,ReporteActividades.class);
+            startActivity(intent);
+        }else {
+            Snackbar.make(view, "No puedes ingresar actividades.", Snackbar.LENGTH_LONG).show();
         }
     }
 

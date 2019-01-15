@@ -416,6 +416,7 @@ public class AgregarActividad extends AppCompatActivity {
             }
         });
     }
+
     private void Mi_hubicacion() {
         int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
         int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);

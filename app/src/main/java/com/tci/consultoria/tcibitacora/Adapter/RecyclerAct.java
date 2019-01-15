@@ -32,7 +32,6 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
         return new RecyclerAct.ActividadesViewHolder(v);
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ActividadesViewHolder actividadesViewHolder, int i) {
         actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
