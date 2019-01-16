@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -248,10 +249,14 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     }
 
     public void agregarActividad(int i){
-        Intent intent = new Intent(CargarActividades.this,AgregarActividad.class);
-        intent.putExtra("UID",UID.get(i));
-        intent.putExtra("actividad","Nombre de actividad: "+listFechaActividades.get(i).getNombre());
-        intent.putExtra("posicion",i);
-        startActivity(intent);
+        if(listFechaActividades.get(i).getStatus()==0){
+            Intent intent = new Intent(CargarActividades.this,AgregarActividad.class);
+            intent.putExtra("UID",UID.get(i));
+            intent.putExtra("actividad","Nombre de actividad: "+listFechaActividades.get(i).getNombre());
+            intent.putExtra("posicion",i);
+            startActivity(intent);
+        }else{
+            Toast.makeText(CargarActividades.this,statics.TOAST_ACTIVIDAD_REALIZADA,Toast.LENGTH_SHORT).show();
+        }
     }
 }

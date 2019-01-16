@@ -63,7 +63,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -279,8 +278,18 @@ public class AgregarActividad extends AppCompatActivity {
     }
     String UUID = null;
     public void guardarDatos(){
-        UUID = java.util.UUID.randomUUID().toString();
+        if(connected){
+            statusfirebase(1);
+            subirFirebase();
+        }else{
+            statusfirebase(1);
+            Toast.makeText(AgregarActividad.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
 
+    public void statusfirebase(int status){
+        UUID = java.util.UUID.randomUUID().toString();
         act.setActRealizada(txtActividadRealizada.getText().toString());
         act.setHora(hora);
         act.setLatitud(latitud);
@@ -288,42 +297,36 @@ public class AgregarActividad extends AppCompatActivity {
         act.setOpcion(spnOpcion.getSelectedItem().toString());
         act.setPath(mCurrentPhotoPath);
         act.setRazonSocial(rSOCIAL);
+        act.setStatus(status);
         act.setUrl("");
         act.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
-
-    if(UID != null){
-        act.setPrograming(1);
-        act.setRecord(listFechaActividades.get(pos).getRecord());
-        act.setNombre(listFechaActividades.get(pos).getNombre());
-        act.setFecha(listFechaActividades.get(pos).getFecha());
-        p.databaseReference
-                .child("Bitacora")
-                .child(EMPRESA)
-                .child("actividades")
-                .child("usuarios")
-                .child(myIMEI)
-                .child(UID)
-                .setValue(act);
-    }else{
-        act.setRecord((long) 1);
-        act.setFecha(fecha);
-        act.setPrograming(0);
-        act.setNombre(txtNombreActividad.getText().toString());
-        p.databaseReference
-                .child("Bitacora")
-                .child(EMPRESA)
-                .child("actividades")
-                .child("usuarios")
-                .child(myIMEI)
-                .child(statics.NO_PROGRAMADA)
-                .child(UUID)
-                .setValue(act);
-    }
-        if(connected){
-            subirFirebase();
+        if(UID != null){
+            act.setPrograming(1);
+            act.setRecord(listFechaActividades.get(pos).getRecord());
+            act.setNombre(listFechaActividades.get(pos).getNombre());
+            act.setFecha(listFechaActividades.get(pos).getFecha());
+            p.databaseReference
+                    .child("Bitacora")
+                    .child(EMPRESA)
+                    .child("actividades")
+                    .child("usuarios")
+                    .child(myIMEI)
+                    .child(UID)
+                    .setValue(act);
         }else{
-            Toast.makeText(AgregarActividad.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
-            finish();
+            act.setRecord((long) 1);
+            act.setFecha(fecha);
+            act.setPrograming(0);
+            act.setNombre(txtNombreActividad.getText().toString());
+            p.databaseReference
+                    .child("Bitacora")
+                    .child(EMPRESA)
+                    .child("actividades")
+                    .child("usuarios")
+                    .child(myIMEI)
+                    .child(statics.NO_PROGRAMADA)
+                    .child(UUID)
+                    .setValue(act);
         }
     }
 
@@ -370,9 +373,8 @@ public class AgregarActividad extends AppCompatActivity {
                         if (task.isSuccessful())
                         {
                             downloadImageUrl = task.getResult().toString();
-
                             act.setUrl(downloadImageUrl);
-                            act.setStatus(0);
+                            act.setStatus(2);
                             if(UID != null){
                             p.databaseReference
                                     .child("Bitacora")

@@ -34,4 +34,8 @@ public interface statics {
     public static final String ALERT_MESSAGE_GPS_DESACTIVADO = "El sistema GPS esta desactivado, para registrar tus actividades es necesario activarlo." +
                                                                 " Por favor pulsa el botón rojo (Activar) para activarlo.";
 
+    public static final String TOAST_ACTIVIDAD_REALIZADA = "Ya registraste esta actividad!";
+    public static final String TOAST_VALIDA_INTERNET = "No tienes internet, verifica tu conexión";
+    public static final String TOAST_VALIDA_DATOS_POR_SUBIR = "No tienes registros pendientes.";
+
 }

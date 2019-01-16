@@ -8,7 +8,7 @@
         android:title="delete"/>
 
     <item android:id="@+id/btn_agregar"
-        android:icon="@drawable/ic_addactividad"
+        android:icon="@drawable/ic_cloud_upload"
         app:showAsAction="ifRoom"
         android:title="delete"/>
 </menu>
