@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +38,7 @@ import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
 
 public class CargarActividades extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
     EditText etxt_FechaInicio,etxt_FechaFin;
+    TextView txt_texto;
     int dia,mes,ano;
     String Fecha="";
     private Date date, date2,date3;
@@ -45,9 +48,14 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     private ArrayList<Actividad> listActividades = new ArrayList<Actividad>();
     public static ArrayList<Actividad> listFechaActividades = new ArrayList<Actividad>();
     private ArrayList<String> UID = new ArrayList<>();
-
+    private boolean opcFechaSelected=true;
     Principal p = Principal.getInstance();
     Actividad act = new Actividad();
+    LinearLayout ly_fechas;
+    SimpleDateFormat dateFormatActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    Date dateActual = new Date();
+    String fechaActual = dateFormatActual.format(dateActual);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +66,9 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
+        txt_texto.setText(R.string.txt_fecha_actual);
+        ly_fechas.setVisibility(View.GONE);
+        actividadesDia();
     }
 
     @Override
@@ -74,8 +85,21 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 onBackPressed();
                 break;
             case R.id.btn_calendar_white:
-                item.setIcon(R.drawable.ic_date_range_black_24dp);
-
+                if(opcFechaSelected) {
+                    item.setIcon(R.drawable.ic_date_range_black_24dp);
+                    etxt_FechaInicio.setText("");
+                    etxt_FechaFin.setText("");
+                    opcFechaSelected = false;
+                    txt_texto.setText(R.string.txt_rango);
+                    ly_fechas.setVisibility(View.VISIBLE);
+                    recycler_actividades.setAdapter(null);
+                }else{
+                    item.setIcon(R.drawable.ic_date_white);
+                    opcFechaSelected = true;
+                    ly_fechas.setVisibility(View.GONE);
+                    txt_texto.setText(R.string.txt_fecha_actual);
+                    actividadesDia();
+                }
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -83,12 +107,13 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
         return true;
     }
 
-
     public void init(){
         etxt_FechaInicio = findViewById(R.id.etxt_FechaInicio);
         etxt_FechaFin = findViewById(R.id.etxt_FechaFin);
         dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
         recycler_actividades = findViewById(R.id.recycler_actividades);
+        ly_fechas = findViewById(R.id.ly_fechas);
+        txt_texto = findViewById(R.id.txt_texto);
     }
     public void obtenerFechaInicio(View view){
         Calendar calendario = Calendar.getInstance();
@@ -159,6 +184,54 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
 
                 }
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void actividadesDia(){
+        p.databaseReference.child("Bitacora")
+                .child(EMPRESA)
+                .child("actividades").child("usuarios").child(myIMEI).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listFechaActividades.clear();
+                UID.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Actividad act = snapshot.getValue(Actividad.class);
+                    String auxNoprogramada = snapshot.getKey();
+                    if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
+                        try {
+                            date3 = dateFormat.parse(act.getFecha());
+                            date = dateFormat.parse(fechaActual);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(date3.equals(date)){
+                            listFechaActividades.add(act);
+                            UID.add(snapshot.getKey());
+                        }
+                        if(listFechaActividades.size()!=0) {
+                            recyclerAct = new RecyclerAct(listFechaActividades, new RecyclerViewClick() {
+                                @Override
+                                public void onClick(View v, int position) {
+                                    agregarActividad(position);
+                                }
+                            });
+
+                            recycler_actividades.setAdapter(recyclerAct);
+                            recycler_actividades.setHasFixedSize(true);
+                            recycler_actividades.setLayoutManager(new GridLayoutManager(CargarActividades.this, 2));
+                        }else{
+                            recycler_actividades.setAdapter(null);
+                        }
+                    }
+                }
+
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

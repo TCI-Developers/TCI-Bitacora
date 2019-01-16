@@ -2,9 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.tci.consultoria.tcibitacora.MainActivity">
-    <item android:id="@+id/btn_upload"
+    <item
+        android:id="@+id/btn_upload"
         android:icon="@drawable/ic_cloud_upload"
-        app:showAsAction="ifRoom"
-        android:title="delete"/>
+        android:title="Cart"
+        app:actionLayout="@layout/custom_action_item_layout"
+        app:showAsAction="always"/>
 
 </menu>

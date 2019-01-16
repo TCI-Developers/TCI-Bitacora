@@ -46,6 +46,7 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.tci.consultoria.tcibitacora.Adapter.SpinnerOpc;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.Modelos.opciones;
@@ -77,9 +78,10 @@ public class AgregarActividad extends AppCompatActivity {
     Spinner spnOpcion;
     TextView txtActividad,txtProgress;
     ProgressBar bar;
+    SpinnerOpc spinnerOpc;
     PhotoViewAttacher photoViewAttacher = null;
     static final int REQUEST_TAKE_PHOTO = 1;
-    List<opciones> listaOpciones = new ArrayList<opciones>();
+    private List<opciones> listaOpciones = new ArrayList<opciones>();
     ArrayAdapter<opciones> arrayAdapterOpciones;
     String nombreActividad="";
     private String downloadImageUrl;
@@ -249,10 +251,9 @@ public class AgregarActividad extends AppCompatActivity {
                 for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
                     opciones opc = objSnapshot.getValue(opciones.class);
                     listaOpciones.add(opc);
-                    arrayAdapterOpciones = new ArrayAdapter<opciones>(
-                            AgregarActividad.this,android.R.layout.simple_spinner_item,listaOpciones);
-                    spnOpcion.setAdapter(arrayAdapterOpciones);
                 }
+                spinnerOpc = new SpinnerOpc((ArrayList<opciones>) listaOpciones,AgregarActividad.this);
+                spnOpcion.setAdapter(spinnerOpc);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -264,7 +265,7 @@ public class AgregarActividad extends AppCompatActivity {
     public void validaFormulario(){
         if(spnOpcion.getSelectedItem().toString().equals(statics.VALIDA_SPINNER)){
             Toast.makeText(AgregarActividad.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
-        }else if(txtNombreActividad.getText().length()==0){
+        }else if(txtNombreActividad.getVisibility() != View.GONE && txtNombreActividad.getText().length()==0){
             txtNombreActividad.setError(statics.VALIDA_ERROR_NOMBRE_ACTIVIDAD);
         }else if(txtActividadRealizada.getText().length()==0){
             txtActividadRealizada.setError(statics.VALIDA_ERROR_ACT_REALIZADA);
@@ -289,9 +290,11 @@ public class AgregarActividad extends AppCompatActivity {
         act.setRazonSocial(rSOCIAL);
         act.setUrl("");
         act.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+
     if(UID != null){
+        act.setPrograming(1);
         act.setRecord(listFechaActividades.get(pos).getRecord());
-        act.setNombre(txtNombreActividad.getText().toString());
+        act.setNombre(listFechaActividades.get(pos).getNombre());
         act.setFecha(listFechaActividades.get(pos).getFecha());
         p.databaseReference
                 .child("Bitacora")
@@ -304,6 +307,7 @@ public class AgregarActividad extends AppCompatActivity {
     }else{
         act.setRecord((long) 1);
         act.setFecha(fecha);
+        act.setPrograming(0);
         act.setNombre(txtNombreActividad.getText().toString());
         p.databaseReference
                 .child("Bitacora")
@@ -392,6 +396,7 @@ public class AgregarActividad extends AppCompatActivity {
                             bar.setVisibility(View.GONE);
                             txtProgress.setVisibility(View.GONE);
                             UID=null;
+                            mCurrentPhotoPath = null;
 //                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_LONG).show();
                             finish();
                         }

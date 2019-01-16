@@ -14,6 +14,7 @@ public class Actividad {
     private int status;
     private String url;
     private Double viaticos;
+    private int programing;
 
     public Actividad() {
     }
@@ -122,6 +123,11 @@ public class Actividad {
         this.record = record;
     }
 
+    public int getPrograming() {
+        return programing;
+    }
 
-
+    public void setPrograming(int programing) {
+        this.programing = programing;
+    }
 }

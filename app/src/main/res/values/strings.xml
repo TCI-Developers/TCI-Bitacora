@@ -15,6 +15,7 @@
     <string name="hint_login_pass">Contraseña</string>
 
     <string name="txt_rango">Ingresa rango de fecha:</string>
+    <string name="txt_fecha_actual">Actividades del día:</string>
 
 
     <string name="btn_Login">Iniciar sesión</string>
