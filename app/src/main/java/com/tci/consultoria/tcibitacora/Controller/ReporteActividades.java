@@ -1,5 +1,6 @@
 package com.tci.consultoria.tcibitacora.Controller;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,9 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Adapter.RecyclerAct;
 import com.tci.consultoria.tcibitacora.AlertDialog.AlertUpdate;
@@ -43,7 +46,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     TextView textCartItemCount;
     private ArrayList<String> ID = new ArrayList<>();
     int mCartItemCount = 0;
-
+    public boolean connected;
     public static int positionAlert;
     public static ArrayList<String> UID = new ArrayList<>();
 
@@ -172,41 +175,67 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
 
     @Override
     public void getTextDialogFregment(String opcion, String actvidad, Double viativos, String UID, int position) {
-        act.setActRealizada(actvidad);
-        act.setFecha(listActividades.get(position).getFecha());
-        act.setHora(listActividades.get(position).getHora());
-        act.setLatitud(listActividades.get(position).getLatitud());
-        act.setLongitud(listActividades.get(position).getLongitud());
-        act.setNombre(listActividades.get(position).getNombre());
-        act.setOpcion(opcion);
-        act.setPath(listActividades.get(position).getPath());
-        act.setRazonSocial(listActividades.get(position).getRazonSocial());
-        act.setRecord(listActividades.get(position).getRecord());
-        act.setStatus(listActividades.get(position).getStatus());
-        act.setUrl(listActividades.get(position).getUrl());
-        act.setViaticos(viativos);
-        act.setPrograming(listActividades.get(position).getPrograming());
+        if(opcion.equals(statics.VALIDA_SPINNER)){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
+        }else if(actvidad.length()==0){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
+        }else if(viativos==0.0){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
+        }else{
+            act.setActRealizada(actvidad);
+            act.setFecha(listActividades.get(position).getFecha());
+            act.setHora(listActividades.get(position).getHora());
+            act.setLatitud(listActividades.get(position).getLatitud());
+            act.setLongitud(listActividades.get(position).getLongitud());
+            act.setNombre(listActividades.get(position).getNombre());
+            act.setOpcion(opcion);
+            act.setPath(listActividades.get(position).getPath());
+            act.setRazonSocial(listActividades.get(position).getRazonSocial());
+            act.setRecord(listActividades.get(position).getRecord());
+            act.setStatus(listActividades.get(position).getStatus());
+            act.setUrl(listActividades.get(position).getUrl());
+            act.setViaticos(viativos);
+            act.setPrograming(listActividades.get(position).getPrograming());
 
-        int comprueva = listActividades.get(position).getPrograming();
-        if(comprueva != 0) {
-            p.databaseReference
-                    .child("Bitacora")
-                    .child(EMPRESA)
-                    .child("actividades")
-                    .child("usuarios")
-                    .child(myIMEI)
-                    .child(UID)
-                    .setValue(act);
-        }else {
-            p.databaseReference
-                    .child("Bitacora")
-                    .child(EMPRESA)
-                    .child("actividades")
-                    .child("usuarios")
-                    .child(myIMEI)
-                    .child(statics.NO_PROGRAMADA)
-                    .child(UID)
-                    .setValue(act);
+            int comprueva = listActividades.get(position).getPrograming();
+            if(comprueva != 0) {
+                p.databaseReference
+                        .child("Bitacora")
+                        .child(EMPRESA)
+                        .child("actividades")
+                        .child("usuarios")
+                        .child(myIMEI)
+                        .child(UID)
+                        .setValue(act);
+            }else {
+                p.databaseReference
+                        .child("Bitacora")
+                        .child(EMPRESA)
+                        .child("actividades")
+                        .child("usuarios")
+                        .child(myIMEI)
+                        .child(statics.NO_PROGRAMADA)
+                        .child(UID)
+                        .setValue(act);
+            }
         }
+    }
+
+    public void validaInternet(){
+        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                connected = snapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

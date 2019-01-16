@@ -3,6 +3,7 @@ package com.tci.consultoria.tcibitacora.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,7 +44,7 @@ public class AlertUpdate extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.Theme_Dialog_Translucent);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.alert_update,null);
 
@@ -64,23 +66,23 @@ public class AlertUpdate extends AppCompatDialogFragment {
                 }).setPositiveButton(statics.BTN_ALERTDIALOG_ACTUALIZAR, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(spnOpcion.getSelectedItem().toString().equals(statics.VALIDA_SPINNER)){
-                    Toast.makeText(builder.getContext(), statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
-                }else if(txtActividadRealizada.getText().length()==0){
-                    Toast.makeText(builder.getContext(), statics.TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
-                }else if(txtViaticos.getText().length()==0){
-                    Toast.makeText(builder.getContext(), statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
-                }else{
                     String opcion = spnOpcion.getSelectedItem().toString();
                     String actividad = txtActividadRealizada.getText().toString();
-                    Double viaticos = Double.parseDouble(txtViaticos.getText().toString());
+                    Double viaticos;
+                    if(txtViaticos.getText().toString().length()==0){
+                        viaticos=0.0;
+                    }else{
+                        viaticos = Double.parseDouble(txtViaticos.getText().toString());
+                    }
                     String uid = UID.get(positionAlert);
                     listener.getTextDialogFregment(opcion,actividad,viaticos,uid,positionAlert);
-                }
             }
-        }).setCancelable(false);
-
-        return builder.create();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(Color.WHITE);
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.WHITE);
+        return alertDialog;
     }
     public void llenarSpinner(final Context context){
         p.databaseReference.child("Bitacora")

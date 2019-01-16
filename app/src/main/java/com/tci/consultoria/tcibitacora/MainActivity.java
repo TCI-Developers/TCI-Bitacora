@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +33,7 @@ import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
 import com.tci.consultoria.tcibitacora.Controller.ReporteActividades;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
+import com.tci.consultoria.tcibitacora.Utils.LocationUtilis;
 
 import java.util.ArrayList;
 
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean IMEIVALIDO= false;
     public static boolean connected;
     public static String rSOCIAL="";
+    AlertDialog alert = null;
+    LocationManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +75,30 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.mipmap.ic_tci);
 
         init();
+        manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
         validaInternet();
     }
+
+    private void AlertNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.Theme_Dialog_Translucent);
+        builder .setTitle("GPS")
+                .setMessage(statics.ALERT_MESSAGE_GPS_DESACTIVADO)
+                .setIcon(R.drawable.ic_location_off)
+                .setCancelable(false)
+                .setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                    }
+                });
+        alert = builder.create();
+        alert.show();
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.RED);
+    }
+
     public void init(){
         card_CargarActividades = findViewById(R.id.card_CargarActividades);
         card_ReporteActividades = findViewById(R.id.card_ReporteActividades);
@@ -216,6 +243,4 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 }

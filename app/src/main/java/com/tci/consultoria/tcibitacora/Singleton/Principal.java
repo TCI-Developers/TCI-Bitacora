@@ -14,6 +14,7 @@ public class Principal extends AppCompatActivity {
     public StorageReference storageRef;
     public FirebaseAuth firebaseAuth;
 
+
     private static Principal principal;
     private Principal() {
 
@@ -37,7 +38,6 @@ public class Principal extends AppCompatActivity {
             databaseReference = firebaseDatabase.getReference();
             storageRef = FirebaseStorage.getInstance().getReference();
             databaseReference.keepSynced(true);
-
             firebaseAuth = FirebaseAuth.getInstance();
         }
     }

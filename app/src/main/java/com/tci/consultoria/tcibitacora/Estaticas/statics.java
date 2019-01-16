@@ -29,6 +29,9 @@ public interface statics {
     public static final String TITTLE_ALERTDIALOG_ACTUALIZAR = "Actualizar actividad.";
     public static final String MESSAGE_ALERTDIALOG_ACTUALIZAR = "Por favor revisa tu información antes de modificar";
     public static final String TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR = "El campo de actividad realizada no puede ser vacio.";
-    public static final String TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR = "El campo de Viaticos no puede ser vacio.";
+    public static final String TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR = "El campo de Viáticos no puede ser vacio.";
+
+    public static final String ALERT_MESSAGE_GPS_DESACTIVADO = "El sistema GPS esta desactivado, para registrar tus actividades es necesario activarlo." +
+                                                                " Por favor pulsa el botón rojo (Activar) para activarlo.";
 
 }
