@@ -4,6 +4,7 @@ public interface statics {
     public static final String AUTENTICACION_FALLIDA = "Usuario incorrecto verifica correo y/o contraseña";
     public static final String TITULO_ALERTA_SALIDA_APP = "Advertencia!";
     public static final String MESSAGE_ALERTA_SALIDA_APP = "Estas apunto de salir de la aplicación. ¿Deseas continuar?";
+
     public static final String BUTTON_OK_ALERTA_SALIDA_APP = "Salir";
     public static final String BUTTON_CANCEL_ALERTA_SALIDA_APP = "Cancelar";
 
@@ -15,9 +16,6 @@ public interface statics {
     public static final String VALIDA_ERROR_FOTO = "Fotografia requerida!";
 
     public static final String NO_PROGRAMADA = "no programada";
-
-
-    //Razón social
 
     public static final String RAZON_SOCIAL_BONANZA = "TCI Bonanza";
     public static final String RAZON_SOCIAL_TCI = "TCI Consultoria";
@@ -33,7 +31,6 @@ public interface statics {
 
     public static final String ALERT_MESSAGE_GPS_DESACTIVADO = "El sistema GPS esta desactivado, para registrar tus actividades es necesario activarlo." +
                                                                 " Por favor pulsa el botón rojo (Activar) para activarlo.";
-
     public static final String TOAST_ACTIVIDAD_REALIZADA = "Ya registraste esta actividad!";
     public static final String TOAST_VALIDA_INTERNET = "No tienes internet, verifica tu conexión";
     public static final String TOAST_VALIDA_DATOS_POR_SUBIR = "No tienes registros pendientes.";
