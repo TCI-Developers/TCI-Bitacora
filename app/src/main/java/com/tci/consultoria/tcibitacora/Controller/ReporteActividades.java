@@ -3,12 +3,9 @@ package com.tci.consultoria.tcibitacora.Controller;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,11 +42,8 @@ import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
@@ -135,12 +129,12 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 onBackPressed();
                 break;
             case R.id.btn_upload:
-
               if(listActividades.size()!=0)  {
                     if(connected) {
                         for(int j=0; j<UID.size(); j++){
                                 subirFotoFirebase(j);
                         }
+                        cargaActividades();
                     }else{
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
                     }

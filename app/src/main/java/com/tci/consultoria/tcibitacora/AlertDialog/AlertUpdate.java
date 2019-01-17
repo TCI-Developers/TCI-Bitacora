@@ -10,17 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Adapter.SpinnerOpc;
-import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Modelos.opciones;
 import com.tci.consultoria.tcibitacora.R;

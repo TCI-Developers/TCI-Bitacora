@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,7 +22,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,9 +32,6 @@ import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
 import com.tci.consultoria.tcibitacora.Controller.ReporteActividades;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
-import com.tci.consultoria.tcibitacora.Utils.LocationUtilis;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TelephonyManager mTelephony;
@@ -46,10 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public static String EMPRESA="";
     public static String myIMEI = "";
     private static final String[] PERMISOS = {
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            Manifest.permission.READ_PHONE_STATE
     };
     private static final int REQUEST_CODE = 1;
     private boolean IMEIVALIDO= false;
@@ -61,28 +53,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
-        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        int leer4 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED || leer4 == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(MainActivity.this, PERMISOS, REQUEST_CODE);
-        }
-        getIMEI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_tci);
-
         init();
         manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             AlertNoGps();
         }
         validaInternet();
-
         swipeLoadImei.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -94,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void AlertNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.Theme_Dialog_Translucent);
-        builder .setTitle("GPS")
+        builder.setTitle("GPS")
                 .setMessage(statics.ALERT_MESSAGE_GPS_DESACTIVADO)
                 .setIcon(R.drawable.ic_location_off)
                 .setCancelable(false)
@@ -120,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
         EMPRESA = EMPRESA.substring(0,pos);
         razonSocial(EMPRESA);
         veficaIMEI();
-
         swipeLoadImei = findViewById(R.id.swipeLoadImei);
     }
 
@@ -212,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void veficaIMEI(){
+        getIMEI();
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
                 .child("actividades").child("usuarios").addValueEventListener(new ValueEventListener() {
