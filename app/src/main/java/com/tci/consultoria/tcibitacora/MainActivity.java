@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
     public void veficaIMEI(){
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
-                .child("actividades").child("usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("actividades").child("usuarios").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){

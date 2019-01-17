@@ -303,7 +303,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     }
 
     public void subirFotoFirebase(final int pos) {
-        StorageReference path = p.storageRef.child(EMPRESA+namePhoto.get(pos));
+        StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
@@ -330,9 +330,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                             Toast.makeText(ReporteActividades.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             throw task.getException();
                         }else{
-                            downloadImageUrl = p.storageRef.child(EMPRESA+namePhoto.get(pos)).getDownloadUrl().toString();
+                            downloadImageUrl = p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos)).getDownloadUrl().toString();
                         }
-                        return p.storageRef.child(EMPRESA+namePhoto.get(pos)).getDownloadUrl();
+                        return p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos)).getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
