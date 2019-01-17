@@ -10,17 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Adapter.SpinnerOpc;
-import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Modelos.opciones;
 import com.tci.consultoria.tcibitacora.R;
@@ -55,7 +50,6 @@ public class AlertUpdate extends AppCompatDialogFragment {
         llenarSpinner(builder.getContext());
         txtActividadRealizada.setText(listActividades.get(positionAlert).getActRealizada());
         txtViaticos.setText(String.valueOf(listActividades.get(positionAlert).getViaticos()));
-
         builder.setView(view)
                 .setTitle(statics.TITTLE_ALERTDIALOG_ACTUALIZAR)
                 .setMessage(statics.MESSAGE_ALERTDIALOG_ACTUALIZAR)
@@ -98,6 +92,7 @@ public class AlertUpdate extends AppCompatDialogFragment {
                         }
                         spinnerOpc = new SpinnerOpc((ArrayList<opciones>) listaOpciones,context);
                         spnOpcion.setAdapter(spinnerOpc);
+                        spnOpcion.setSelection(listActividades.get(positionAlert).getSelectopc());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {}

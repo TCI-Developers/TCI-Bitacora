@@ -8,6 +8,7 @@ public class Actividad {
     private Double longitud;
     private String nombre;
     private String path;
+    private int selectopc;
     private String razonSocial;
     private Long record;
     private String opcion;
@@ -17,6 +18,14 @@ public class Actividad {
     private int programing;
 
     public Actividad() {
+    }
+
+    public int getSelectopc() {
+        return selectopc;
+    }
+
+    public void setSelectopc(int selectopc) {
+        this.selectopc = selectopc;
     }
 
     public Double getLatitud() {

@@ -56,7 +56,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     SimpleDateFormat dateFormatActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date dateActual = new Date();
     String fechaActual = dateFormatActual.format(dateActual);
-
+    TextView txtSinActividades;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +115,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
         recycler_actividades = findViewById(R.id.recycler_actividades);
         ly_fechas = findViewById(R.id.ly_fechas);
         txt_texto = findViewById(R.id.txt_texto);
+        txtSinActividades = findViewById(R.id.txtSinActividades);
     }
     public void obtenerFechaInicio(View view){
         Calendar calendario = Calendar.getInstance();
@@ -168,6 +169,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             UID.add(obSnapshot.getKey());
                         }
                         if(listFechaActividades.size()!=0) {
+                            txtSinActividades.setVisibility(View.GONE);
                             recyclerAct = new RecyclerAct(listFechaActividades, new RecyclerViewClick() {
                                 @Override
                                 public void onClick(View v, int position) {
@@ -179,6 +181,8 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             recycler_actividades.setHasFixedSize(true);
                             recycler_actividades.setLayoutManager(new GridLayoutManager(CargarActividades.this, 2));
                         }else{
+                            txtSinActividades.setVisibility(View.VISIBLE);
+                            txtSinActividades.setText(R.string.texto_actividades_rango);
                             recycler_actividades.setAdapter(null);
                         }
                     }
@@ -215,6 +219,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             UID.add(snapshot.getKey());
                         }
                         if(listFechaActividades.size()!=0) {
+                            txtSinActividades.setVisibility(View.GONE);
                             recyclerAct = new RecyclerAct(listFechaActividades, new RecyclerViewClick() {
                                 @Override
                                 public void onClick(View v, int position) {
@@ -226,6 +231,8 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             recycler_actividades.setHasFixedSize(true);
                             recycler_actividades.setLayoutManager(new GridLayoutManager(CargarActividades.this, 2));
                         }else{
+                            txtSinActividades.setVisibility(View.VISIBLE);
+                            txtSinActividades.setText(R.string.texto_actividades_dia);
                             recycler_actividades.setAdapter(null);
                         }
                     }
