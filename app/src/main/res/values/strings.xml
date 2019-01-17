@@ -22,4 +22,8 @@
 
     <string name="title_activity_login">Login</string>
 
+    <string name="texto_sin_pendientes">Sin pendientes por subir.</string>
+    <string name="texto_actividades_dia">No hay actividades el dia de hoy.</string>
+    <string name="texto_actividades_rango">No se encontrarón actividades. \nVerifica las fechas.</string>
+
 </resources>

@@ -55,7 +55,6 @@ public class AlertUpdate extends AppCompatDialogFragment {
         llenarSpinner(builder.getContext());
         txtActividadRealizada.setText(listActividades.get(positionAlert).getActRealizada());
         txtViaticos.setText(String.valueOf(listActividades.get(positionAlert).getViaticos()));
-
         builder.setView(view)
                 .setTitle(statics.TITTLE_ALERTDIALOG_ACTUALIZAR)
                 .setMessage(statics.MESSAGE_ALERTDIALOG_ACTUALIZAR)
@@ -98,6 +97,7 @@ public class AlertUpdate extends AppCompatDialogFragment {
                         }
                         spinnerOpc = new SpinnerOpc((ArrayList<opciones>) listaOpciones,context);
                         spnOpcion.setAdapter(spinnerOpc);
+                        spnOpcion.setSelection(listActividades.get(positionAlert).getSelectopc());
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {}

@@ -9,4 +9,6 @@
     <color name="lightGrayLine">#ededed</color>
     <color name="Separador_spinner">#cecece</color>
 
+    <color name="texto_sin_pendientes">#6c6c6c</color>
+
 </resources>

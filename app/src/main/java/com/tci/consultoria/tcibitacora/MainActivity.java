@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public static String rSOCIAL="";
     AlertDialog alert = null;
     LocationManager manager;
+    private SwipeRefreshLayout swipeLoadImei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,14 @@ public class MainActivity extends AppCompatActivity {
             AlertNoGps();
         }
         validaInternet();
+
+        swipeLoadImei.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                veficaIMEI();
+                swipeLoadImei.setRefreshing(false);
+            }
+        });
     }
 
     private void AlertNoGps() {
@@ -110,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
         EMPRESA = EMPRESA.substring(0,pos);
         razonSocial(EMPRESA);
         veficaIMEI();
+
+        swipeLoadImei = findViewById(R.id.swipeLoadImei);
     }
 
     @Override

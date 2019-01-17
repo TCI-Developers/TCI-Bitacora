@@ -296,6 +296,7 @@ public class AgregarActividad extends AppCompatActivity {
         act.setLongitud(longitud);
         act.setOpcion(spnOpcion.getSelectedItem().toString());
         act.setPath(mCurrentPhotoPath);
+        act.setSelectopc(spnOpcion.getSelectedItemPosition());
         act.setRazonSocial(rSOCIAL);
         act.setStatus(status);
         act.setUrl("");

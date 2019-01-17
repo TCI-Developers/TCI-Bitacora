@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -67,12 +68,12 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
     private ProgressBar bar;
-    private TextView progres, pendientes;
-    private ArrayList<String> UID2 = new ArrayList<>();
+    private TextView progres,txtSinActividades;
     int mCartItemCount = 0;
     public boolean connected;
     public static int positionAlert;
     public static ArrayList<String> UID = new ArrayList<>();
+    private SwipeRefreshLayout swipeLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,13 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         init();
         cargaActividades();
         validaInternet();
+
+        swipeLoad.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                cargaActividades();
+            }
+        });
     }
 
     @Override
@@ -127,6 +135,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 onBackPressed();
                 break;
             case R.id.btn_upload:
+
               if(listActividades.size()!=0)  {
                     if(connected) {
                         for(int j=0; j<UID.size(); j++){
@@ -152,6 +161,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         imgRUTA = new ArrayList<String>();
         bar = findViewById(R.id.progressBar);
         progres = findViewById(R.id.textView2);
+        swipeLoad = findViewById(R.id.swipeLoad);
+        txtSinActividades = findViewById(R.id.txtSinActividades);
     }
 
     public void cargaActividades(){
@@ -161,6 +172,10 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listActividades.clear();
+                UID.clear();
+                namePhoto.clear();
+                record.clear();
+                imgRUTA.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String auxNoprogramada = snapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
@@ -190,6 +205,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 mCartItemCount = listActividades.size();
                 setupBadge();
                 if(listActividades.size()!=0) {
+                    txtSinActividades.setVisibility(View.GONE);
                     recyclerActReport = new RecyclerAct(listActividades, new RecyclerViewClick() {
                         @Override
                         public void onClick(View v, int position) {
@@ -203,6 +219,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     recyclerActividades.setLayoutManager(new GridLayoutManager(ReporteActividades.this, 1));
                 }else{
                     recyclerActividades.setAdapter(null);
+                    txtSinActividades.setVisibility(View.VISIBLE);
                 }
             }
             @Override
@@ -210,7 +227,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
 
             }
         });
-
+        swipeLoad.setRefreshing(false);
     }
 
     public void showAlertUpdate(){
@@ -300,7 +317,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             Toast.makeText(getApplicationContext(), "La fotografia ya no se encuentra en el celular", Toast.LENGTH_LONG).show();
         }
 
-
         uploadTask = path.putBytes(data);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -341,7 +357,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(dataSnapshot.exists()){
-                                        //Toast.makeText(getApplicationContext(), "Existe awebo", Toast.LENGTH_LONG).show();
                                         p.databaseReference
                                                 .child("Bitacora")
                                                 .child(EMPRESA)
