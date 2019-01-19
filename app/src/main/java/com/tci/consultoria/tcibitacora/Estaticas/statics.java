@@ -34,5 +34,5 @@ public interface statics {
     public static final String TOAST_ACTIVIDAD_REALIZADA = "Ya registraste esta actividad!";
     public static final String TOAST_VALIDA_INTERNET = "No tienes internet, verifica tu conexión";
     public static final String TOAST_VALIDA_DATOS_POR_SUBIR = "No tienes registros pendientes.";
-
+    public static final String ERROR_FOTOGRAFIA = "La fotografia ya no se encuentra en el celular";
 }

@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.tci.consultoria.tcibitacora.Background.IntentService;
 import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
 import com.tci.consultoria.tcibitacora.Controller.ReporteActividades;
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_tci);
+        Intent intent = new Intent(this, IntentService.class);
+        startService(intent);
         init();
         manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {

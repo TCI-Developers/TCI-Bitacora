@@ -153,7 +153,9 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 listFechaActividades.clear();
                 UID.clear();
                 for(DataSnapshot obSnapshot : dataSnapshot.getChildren()){
-                    Actividad act = obSnapshot.getValue(Actividad.class);
+                    try {
+                        Actividad act = obSnapshot.getValue(Actividad.class);
+
                     String auxNoprogramada = obSnapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
                         listActividades.add(act);
@@ -186,6 +188,8 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             recycler_actividades.setAdapter(null);
                         }
                     }
+                }catch (Exception e) {
+                }
 
                 }
             }
@@ -205,7 +209,9 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 listFechaActividades.clear();
                 UID.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Actividad act = snapshot.getValue(Actividad.class);
+                    try {
+                        Actividad act = snapshot.getValue(Actividad.class);
+
                     String auxNoprogramada = snapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
                         try {
@@ -236,7 +242,10 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                             recycler_actividades.setAdapter(null);
                         }
                     }
+                }catch (Exception e) {
+
                 }
+            }
 
             }
 
