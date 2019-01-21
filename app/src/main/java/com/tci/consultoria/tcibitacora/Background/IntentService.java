@@ -123,7 +123,7 @@ public class IntentService extends Service {
         if (leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions((Activity) getApplicationContext(), PERMISOS, REQUEST_CODE);
         }
-        manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar(local);
         manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);

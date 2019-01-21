@@ -146,6 +146,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         for(int j=0; j<UID.size(); j++){
                                 subirFotoFirebase(j);
                         }
+                        progressDoalog.dismiss();
                         cargaActividades();
                     }else{
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
@@ -375,7 +376,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                                 .child(myIMEI)
                                                 .child(UID.get(pos))
                                                 .updateChildren(productMap);
-                                        progressDoalog.dismiss();
+//                                        progressDoalog.dismiss();
                                         //uploadQuickBase(pos);
                                     }else{
                                         p.databaseReference
@@ -403,7 +404,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         }else{
                             Toast.makeText(ReporteActividades.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                         }
-                        progressDoalog.dismiss();
                     }
                 });
             }
