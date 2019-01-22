@@ -240,6 +240,7 @@ public class AgregarActividad extends AppCompatActivity {
     }
 
     public void llenarSpinner(){
+
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
                 .child("actividades").child("opciones")
@@ -247,6 +248,9 @@ public class AgregarActividad extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listaOpciones.clear();
+                opciones auxopc = new opciones();
+                auxopc.setOpcion("Selecciona Opcion");
+                listaOpciones.add(auxopc);
                 for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
                     opciones opc = objSnapshot.getValue(opciones.class);
                     listaOpciones.add(opc);
