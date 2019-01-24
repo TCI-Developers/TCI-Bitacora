@@ -10,7 +10,7 @@ public class Actividad {
     private String path;
     private int selectopc;
     private String razonSocial;
-    private Long record;
+    private String record;
     private String opcion;
     private int status;
     private String url;
@@ -116,7 +116,7 @@ public class Actividad {
         this.url = url;
     }
 
-    public Long getRecord() {
+    public String getRecord() {
         return record;
     }
 
@@ -128,7 +128,7 @@ public class Actividad {
         this.opcion = opcion;
     }
 
-    public void setRecord(Long record) {
+    public void setRecord(String record) {
         this.record = record;
     }
 

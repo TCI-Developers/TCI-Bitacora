@@ -146,9 +146,15 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         for(int j=0; j<UID.size(); j++){
                                 subirFotoFirebase(j);
                         }
-                        progressDoalog.dismiss();
-                        cargaActividades();
+                        try {
+                            Thread.sleep(2000);
+                            finish();
+                            progressDoalog.dismiss();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }else{
+                        progressDoalog.dismiss();
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
                     }
               }else{
@@ -347,8 +353,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
-                    public void onComplete(@NonNull Task<Uri> task)
-                    {
+                    public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             downloadImageUrl = task.getResult().toString();
                             // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
@@ -377,7 +382,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                                 .child(UID.get(pos))
                                                 .updateChildren(productMap);
 //                                        progressDoalog.dismiss();
-                                        //uploadQuickBase(pos);
+                                        uploadQuickBase(pos);
                                     }else{
                                         p.databaseReference
                                                 .child("Bitacora")
@@ -388,7 +393,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                                 .child(statics.NO_PROGRAMADA)
                                                 .child(UID.get(pos))
                                                 .updateChildren(productMap);
-                                        //uploadQuickBase(pos);
+
+                                        uploadQuickBase(pos);
                                     }
                                 }
 
@@ -397,10 +403,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
 
                                 }
                             });
-
-                            //bar.setVisibility(View.GONE);
-                            //bar.setProgress(0);
-                            //progres.setVisibility(View.GONE);
+                            bar.setVisibility(View.GONE);
+                            bar.setProgress(0);
+                            progres.setVisibility(View.GONE);
                         }else{
                             Toast.makeText(ReporteActividades.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                         }
@@ -418,20 +423,21 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                //bar.setVisibility(View.VISIBLE);
-                //bar.setProgress((int) progress);
-                //progres.setVisibility(View.VISIBLE);
-                //DecimalFormat format = new DecimalFormat("#.00");
-                //progres.setText(format.format(progress)  + " %");
+                bar.setVisibility(View.VISIBLE);
+                bar.setProgress((int) progress);
+                progres.setVisibility(View.VISIBLE);
+                DecimalFormat format = new DecimalFormat("#.00");
+                progres.setText(format.format(progress)  + " %");
             }
         });
+
     }
 
     void uploadQuickBase(int position){
 
         String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnu3r2cfy?a=API_AddRecord"
                 +"&_fid_17="+listActividades.get(position).getRecord()+ //Record ID
-                "&_fid_9="  +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLatitud()+//Latitud&atLongitud
+                "&_fid_9="  +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Latitud&atLongitud
                 "&_fid_18=" +myIMEI+ // Imei
                 "&_fid_6="  +listActividades.get(position).getActRealizada()+ //Descripcion de actividad
                 "&_fid_7="  +listActividades.get(position).getHora()+// Hora de registro
@@ -479,7 +485,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 if (resultado.equals("No error")) {
                     Log.d("Mensaje del Servidor", resultado);
                     try {
-
+                        progressDoalog.dismiss();
                     } catch (Exception e) {
 //                            Toast.makeText(MainActivity.this, "Error al subir", Toast.LENGTH_SHORT).show();
                         System.out.println("error al subir: " + e.getMessage());

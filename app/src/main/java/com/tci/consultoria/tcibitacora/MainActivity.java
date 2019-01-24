@@ -1,6 +1,7 @@
 package com.tci.consultoria.tcibitacora;
 
 import android.Manifest;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog alert = null;
     LocationManager manager;
     private SwipeRefreshLayout swipeLoadImei;
-
+    public static Intent intentservice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_tci);
-        Intent intent = new Intent(this, IntentService.class);
-        startService(intent);
+
         init();
         manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
         if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
@@ -75,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
                 swipeLoadImei.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        veficaIMEI();
+        super.onStart();
     }
 
     private void AlertNoGps() {
@@ -104,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         int pos = EMPRESA.indexOf("@");
         EMPRESA = EMPRESA.substring(0,pos);
         razonSocial(EMPRESA);
-        veficaIMEI();
         swipeLoadImei = findViewById(R.id.swipeLoadImei);
     }
 
@@ -150,6 +155,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    public void iniciarUbicacionreal(){
+            intentservice  = new Intent(this, IntentService.class);
+            startService(intentservice);
+    }
     public void intentCaragarActividades(View view){
         if(IMEIVALIDO) {
             Intent intent = new Intent(MainActivity.this, CargarActividades.class);
@@ -204,6 +213,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     if(snapshot.getKey().equals(myIMEI)){
+                        if(!IMEIVALIDO){
+                            iniciarUbicacionreal();
+                        }
                         IMEIVALIDO = true;
                     }
                 }
@@ -239,5 +251,20 @@ public class MainActivity extends AppCompatActivity {
                 rSOCIAL = statics.RAZON_SOCIAL_TCI;
                 break;
         }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN){
+
+        }
+        super.onTrimMemory(level);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Toast.makeText(this,"Bye",Toast.LENGTH_SHORT).show();
+        stopService(intentservice);
+        super.onDestroy();
     }
 }

@@ -81,24 +81,28 @@ public class IntentService extends Service {
             // separate thread because the service normally runs in the process's
             // main thread, which we don't want to block.  We also make it
             // background priority so CPU-intensive work will not disrupt our UI.
-            HandlerThread thread = new HandlerThread("ServiceStartArguments",
-                    Process.THREAD_PRIORITY_BACKGROUND);
-            thread.start();
-            Mi_hubicacion();
-            hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
-            // Get the HandlerThread's Looper and use it for our Handler
-            mServiceLooper = thread.getLooper();
-            mServiceHandler = new ServiceHandler(mServiceLooper);
+            try {
+                HandlerThread thread = new HandlerThread("ServiceStartArguments",
+                        Process.THREAD_PRIORITY_BACKGROUND);
+                thread.start();
+                Mi_hubicacion();
+                hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+                // Get the HandlerThread's Looper and use it for our Handler
+                mServiceLooper = thread.getLooper();
+                mServiceHandler = new ServiceHandler(mServiceLooper);
+            }catch (Exception e){
+
+            }
         }
 
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
-            Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-            // For each start request, send a message to start a job and deliver the
-            // start ID so we know which request we're stopping when we finish the job
-            Message msg = mServiceHandler.obtainMessage();
-            msg.arg1 = startId;
-            mServiceHandler.sendMessage(msg);
+                Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+                // For each start request, send a message to start a job and deliver the
+                // start ID so we know which request we're stopping when we finish the job
+                Message msg = mServiceHandler.obtainMessage();
+                msg.arg1 = startId;
+                mServiceHandler.sendMessage(msg);
 
             // If we get killed, after returning from here, restart
             return START_STICKY;
@@ -155,6 +159,9 @@ public class IntentService extends Service {
         if (location != null) {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
+        }else{
+            latitud = 19.3980857;
+            longitud = -102.0556112;
         }
     }
     }
