@@ -23,7 +23,8 @@ import com.tci.consultoria.tcibitacora.Singleton.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tci.consultoria.tcibitacora.Controller.ReporteActividades.UID;
+import static com.tci.consultoria.tcibitacora.Controller.ReporteActividades.RECORD;
+import static com.tci.consultoria.tcibitacora.Controller.ReporteActividades.UID_BITACORA;
 import static com.tci.consultoria.tcibitacora.Controller.ReporteActividades.listActividades;
 import static com.tci.consultoria.tcibitacora.Controller.ReporteActividades.positionAlert;
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
@@ -61,6 +62,7 @@ public class AlertUpdate extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                     String opcion = spnOpcion.getSelectedItem().toString();
+                    int opcselect = spnOpcion.getSelectedItemPosition();
                     String actividad = txtActividadRealizada.getText().toString();
                     Double viaticos;
                     if(txtViaticos.getText().toString().length()==0){
@@ -68,8 +70,9 @@ public class AlertUpdate extends AppCompatDialogFragment {
                     }else{
                         viaticos = Double.parseDouble(txtViaticos.getText().toString());
                     }
-                    String uid = UID.get(positionAlert);
-                    listener.getTextDialogFregment(opcion,actividad,viaticos,uid,positionAlert);
+                    String record = RECORD.get(positionAlert);
+                    String uidBitacora = UID_BITACORA.get(positionAlert);
+                    listener.getTextDialogFregment(opcion,opcselect,actividad,viaticos,record,uidBitacora,positionAlert);
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -86,6 +89,9 @@ public class AlertUpdate extends AppCompatDialogFragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         listaOpciones.clear();
+                        opciones auxopc = new opciones();
+                        auxopc.setOpcion("Selecciona Opcion");
+                        listaOpciones.add(auxopc);
                         for(DataSnapshot objSnapshot : dataSnapshot.getChildren()){
                             opciones opc = objSnapshot.getValue(opciones.class);
                             listaOpciones.add(opc);
@@ -111,6 +117,6 @@ public class AlertUpdate extends AppCompatDialogFragment {
     }
 
     public interface DialogListener {
-        void getTextDialogFregment(String opcion, String actvidad,Double viativos,String UID,int position);
+        void getTextDialogFregment(String opcion,int opcSelect, String actvidad,Double viativos,String Record,String uidBitacora,int position);
     }
 }

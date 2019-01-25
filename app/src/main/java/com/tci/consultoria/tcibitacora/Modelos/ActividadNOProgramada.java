@@ -1,8 +1,9 @@
 package com.tci.consultoria.tcibitacora.Modelos;
 
-public class Actividad {
+public class ActividadNOProgramada {
     private String actRealizada;
     private String fecha;
+    private String fechaRegistro;
     private String hora;
     private Double latitud;
     private Double longitud;
@@ -17,7 +18,15 @@ public class Actividad {
     private Double viaticos;
     private int programing;
 
-    public Actividad() {
+    public ActividadNOProgramada() {
+    }
+
+    public String getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(String fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     public int getSelectopc() {

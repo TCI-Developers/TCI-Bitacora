@@ -49,7 +49,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tci.consultoria.tcibitacora.Adapter.SpinnerOpc;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.Actividad;
+import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
 import com.tci.consultoria.tcibitacora.Modelos.opciones;
 import com.tci.consultoria.tcibitacora.QuickBase.ParseXmlData;
 import com.tci.consultoria.tcibitacora.QuickBase.Results;
@@ -95,11 +96,12 @@ public class AgregarActividad extends AppCompatActivity {
     UploadTask uploadTask = null;
     private Double latitud=0.0;
     private Double longitud=0.0;
-    Actividad act = new Actividad();
+    ActividadNOProgramada act = new ActividadNOProgramada();
+    Bitacora bitacora = new Bitacora();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date date = new Date();
     String fecha = dateFormat.format(date);
-    String UID;
+    String RECORD;
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     String namePhoto = fecha+hora+"-"+EMPRESA;
     int pos;
@@ -136,7 +138,7 @@ public class AgregarActividad extends AppCompatActivity {
             }
         });
         txtActividad.setText(nombreActividad);
-        if(UID!=null){
+        if(RECORD !=null){
             txtNombreActividad.setVisibility(View.GONE);
         }else{
             txtNombreActividad.setVisibility(View.VISIBLE);
@@ -178,7 +180,7 @@ public class AgregarActividad extends AppCompatActivity {
         try{
             nombreActividad = getIntent().getExtras().getString("actividad");
             pos = getIntent().getExtras().getInt("posicion");
-            UID = getIntent().getExtras().getString("UID");
+            RECORD = getIntent().getExtras().getString("RECORD");
 
         }catch (Exception e){
             txtActividad.setVisibility(View.GONE);
@@ -293,8 +295,8 @@ public class AgregarActividad extends AppCompatActivity {
     public void guardarDatos(){
         if(connected){
             statusfirebase(1);
-            subirFirebase();
-
+            //subirFirebase();
+            Toast.makeText(AgregarActividad.this,"Datos listo para subir a Quickbase.",Toast.LENGTH_LONG).show();
         }else{
             statusfirebase(1);
             Toast.makeText(AgregarActividad.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
@@ -315,33 +317,44 @@ public class AgregarActividad extends AppCompatActivity {
         opcCatalogo = spnOpcion.getSelectedItem().toString();
         act.setPath(mCurrentPhotoPath);
         act.setSelectopc(spnOpcion.getSelectedItemPosition());
+        act.setFechaRegistro(fecha+" "+horaquick);
         act.setStatus(status);
         act.setUrl("");
         act.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
         viaticos = txtViaticos.getText().toString();
-        if(UID != null){
-            act.setPrograming(1);
+        if(RECORD != null){
+            //act.setPrograming(1);
             record = listFechaActividades.get(pos).getRecord();
-            act.setRecord(listFechaActividades.get(pos).getRecord());
-            act.setRazonSocial(listFechaActividades.get(pos).getRazonSocial());
+            bitacora.setActRealizada(actRealizada);
+            bitacora.setFechaRegistro(fecha+" "+horaquick);
+            bitacora.setLatitud(latitud);
+            bitacora.setLongitud(longitud);
+            bitacora.setOpcion(spnOpcion.getSelectedItem().toString());
+            bitacora.setRazonSocial(listFechaActividades.get(pos).getRazonSocial());
             rSocial = listFechaActividades.get(pos).getRazonSocial();
-            act.setNombre(listFechaActividades.get(pos).getNombre());
-            act.setFecha(listFechaActividades.get(pos).getFecha());
+            bitacora.setPath(mCurrentPhotoPath);
+            bitacora.setSelectopc(spnOpcion.getSelectedItemPosition());
+            bitacora.setStatus(status);
+            bitacora.setUrl("");
+            bitacora.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+            bitacora.setRecord(listFechaActividades.get(pos).getRecord());
+            bitacora.setNombre(listFechaActividades.get(pos).getNombre());
+
             p.databaseReference
                     .child("Bitacora")
                     .child(EMPRESA)
                     .child("actividades")
                     .child("usuarios")
                     .child(myIMEI)
-                    .child(UID)
-                    .setValue(act);
+                    .child(RECORD).child(UUID)
+                    .setValue(bitacora);
         }else{
             record = "1";
             act.setRecord("1");
             act.setFecha(fecha);
             act.setRazonSocial(rSOCIAL);
             rSocial = rSOCIAL;
-            act.setPrograming(0);
+            //act.setPrograming(0);
             act.setNombre(txtNombreActividad.getText().toString());
             p.databaseReference
                     .child("Bitacora")
@@ -353,6 +366,7 @@ public class AgregarActividad extends AppCompatActivity {
                     .child(UUID)
                     .setValue(act);
         }
+        finish();
     }
 
     public void subirFirebase() {
@@ -398,19 +412,20 @@ public class AgregarActividad extends AppCompatActivity {
                         if (task.isSuccessful())
                         {
                             downloadImageUrl = task.getResult().toString();
-                            act.setUrl(downloadImageUrl);
-                            act.setStatus(2);
-                            if(UID != null){
+                            if(RECORD != null){
+                                bitacora.setUrl(downloadImageUrl);
                             p.databaseReference
                                     .child("Bitacora")
                                     .child(EMPRESA)
                                     .child("actividades")
                                     .child("usuarios")
                                     .child(myIMEI)
-                                    .child(UID)
-                                    .setValue(act);
-                                uploadQuickBase();
+                                    .child(RECORD)
+                                    .child(UUID)
+                                    .setValue(bitacora);
+                                //uploadQuickBase();
                             }else{
+                                act.setUrl(downloadImageUrl);
                                 p.databaseReference
                                         .child("Bitacora")
                                         .child(EMPRESA)
@@ -420,11 +435,11 @@ public class AgregarActividad extends AppCompatActivity {
                                         .child(statics.NO_PROGRAMADA)
                                         .child(UUID)
                                         .setValue(act);
-                                uploadQuickBase();
+                                //uploadQuickBase();
                             }
                             bar.setVisibility(View.GONE);
                             txtProgress.setVisibility(View.GONE);
-                            UID=null;
+                            RECORD =null;
                             mCurrentPhotoPath = null;
 //                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_LONG).show();
                             finish();
@@ -501,7 +516,7 @@ public class AgregarActividad extends AppCompatActivity {
                     "&_fid_9="  +latLong+//Latitud&atLongitud
                     "&_fid_18=" +myIMEI+ // Imei
                     "&_fid_6="  +actRealizada+ //Descripcion de actividad
-                    "&_fid_7="  +horaquick+// Hora de registro
+                    "&_fid_7="  +fecha+// Hora de registro
                     "&_fid_19=" +opcCatalogo+ // Tipo de actividad
                     "&_fid_20=" +viaticos+// Viaticos consumidos
                     "&_fid_23=" +rSocial+ // Razon social

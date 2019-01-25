@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -35,10 +36,12 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tci.consultoria.tcibitacora.Adapter.RecyclerAct;
+import com.tci.consultoria.tcibitacora.Adapter.RecyclerBitacora;
 import com.tci.consultoria.tcibitacora.AlertDialog.AlertUpdate;
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.Actividad;
+import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
 import com.tci.consultoria.tcibitacora.QuickBase.ParseXmlData;
 import com.tci.consultoria.tcibitacora.QuickBase.Results;
 import com.tci.consultoria.tcibitacora.R;
@@ -53,28 +56,30 @@ import java.util.HashMap;
 
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
+import static com.tci.consultoria.tcibitacora.MainActivity.rSOCIAL;
 
 public class ReporteActividades extends AppCompatActivity implements AlertUpdate.DialogListener{
     Principal p = Principal.getInstance();
-    public static ArrayList<Actividad> listActividades = new ArrayList<Actividad>();
-    Actividad act = new Actividad();
-    private RecyclerAct recyclerActReport;
+    public static ArrayList<ActividadNOProgramada> listActividades;
+    ActividadNOProgramada act = new ActividadNOProgramada();
+    private RecyclerBitacora recyclerActReport;
     private RecyclerView recyclerActividades;
     TextView textCartItemCount;
     private ArrayList<String> namePhoto;
     private UploadTask uploadTask = null;
-    private ArrayList<String> record;
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
     private ProgressBar bar;
-    private ProgressDialog progressDoalog;
     private TextView progres,txtSinActividades;
     int mCartItemCount = 0;
     public boolean connected;
     public static int positionAlert;
-    public static ArrayList<String> UID = new ArrayList<>();
+    public static ArrayList<String> RECORD = new ArrayList<>();
+    public static ArrayList<String> UID_BITACORA = new ArrayList<>();
+    hiloprogress hilo;
     private SwipeRefreshLayout swipeLoad;
-
+    private int cont = 0;
+    public ProgressDialog progressDoalog;
     private static final String token = "b67cthncniw7b9bnuc4d4dh5hu6s";//token TCi Consultoria
     private static final String Tiket = "9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928";
 
@@ -138,26 +143,23 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 onBackPressed();
                 break;
             case R.id.btn_upload:
-              if(listActividades.size()!=0)  {
+                hilo = new hiloprogress();
+                hilo.start();
+                if(listActividades.size()!=0)  {
                     if(connected) {
-                        progressDoalog.setMessage("Subiendo información....");
-                        progressDoalog.setTitle("Por favor espera!");
-                        progressDoalog.show();
-                        for(int j=0; j<UID.size(); j++){
-                                subirFotoFirebase(j);
-                        }
-                        try {
-                            Thread.sleep(2000);
-                            finish();
-                            progressDoalog.dismiss();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                        for(int i = 0; i< RECORD.size(); i++){
+                                for(int j=0;j<imgRUTA.size();j++) {
+                                    subirFotoFirebase(i,j);
+                                }
                         }
                     }else{
+                        hilo.interrupt();
                         progressDoalog.dismiss();
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
                     }
               }else{
+                    hilo.interrupt();
+                    progressDoalog.dismiss();
                   Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_DATOS_POR_SUBIR, Toast.LENGTH_LONG).show();
               }
                 break;
@@ -169,16 +171,16 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
 
     public void init(){
         recyclerActividades = findViewById(R.id.recyclerActividades);
-        namePhoto= new ArrayList<String>();
-        record = new ArrayList<String>();
+        namePhoto = new ArrayList<String>();
         imgRUTA = new ArrayList<String>();
         bar = findViewById(R.id.progressBar);
         progres = findViewById(R.id.textView2);
         swipeLoad = findViewById(R.id.swipeLoad);
         txtSinActividades = findViewById(R.id.txtSinActividades);
+        listActividades = new ArrayList<>();
         progressDoalog = new ProgressDialog(ReporteActividades.this);
     }
-
+    int x;
     public void cargaActividades(){
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
@@ -186,36 +188,26 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listActividades.clear();
-                UID.clear();
+                RECORD.clear();
                 namePhoto.clear();
-                record.clear();
                 imgRUTA.clear();
+                UID_BITACORA.clear();
+                x=0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     try{
-                    String auxNoprogramada = snapshot.getKey();
-                    if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
-                        act = snapshot.getValue(Actividad.class);
-                        int status = act.getStatus();
-                        if(status < 2 && status > 0){
-                            listActividades.add(act);
-                            UID.add(snapshot.getKey());
-                            namePhoto.add(act.getFecha()+act.getHora()+"-"+EMPRESA);
-                            record.add(String.valueOf(act.getRecord()));
-                            imgRUTA.add(act.getPath());
-                        }
-                    }else{
-                        for (DataSnapshot snapshot1:snapshot.getChildren()){
-                            act = snapshot1.getValue(Actividad.class);
+                        for (DataSnapshot snapshot1:snapshot.getChildren()) {
+                            Bitacora bitacora =  snapshot1.getValue(Bitacora.class);
+                            act = snapshot1.getValue(ActividadNOProgramada.class);
                             int status = act.getStatus();
-                            if(status < 2 && status > 0){
-                            listActividades.add(act);
-                            UID.add(snapshot1.getKey());
-                            namePhoto.add(act.getFecha()+act.getHora()+"-"+EMPRESA);
-                            record.add(String.valueOf(act.getRecord()));
-                            imgRUTA.add(act.getPath());
+                            if (status < 2 && status > 0) {
+                                listActividades.add(act);
+                                RECORD.add(snapshot.getKey());
+                                UID_BITACORA.add(snapshot1.getKey());
+                                namePhoto.add(bitacora.getFechaRegistro() + "-" + EMPRESA);
+                                imgRUTA.add(bitacora.getPath());
                             }
                         }
-                    }
+                        x++;
                     }catch (Exception e) {
                     }
                 }
@@ -223,10 +215,10 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 setupBadge();
                 if(listActividades.size()!=0) {
                     txtSinActividades.setVisibility(View.GONE);
-                    recyclerActReport = new RecyclerAct(listActividades, new RecyclerViewClick() {
+                    recyclerActReport = new RecyclerBitacora(listActividades, new RecyclerViewClick() {
                         @Override
                         public void onClick(View v, int position) {
-                            UID.get(position);
+                            RECORD.get(position);
                             positionAlert = position;
                             showAlertUpdate();
                         }
@@ -253,80 +245,15 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         alertUpdate.show(getSupportFragmentManager(),"actualizar");
     }
 
-    @Override
-    public void getTextDialogFregment(String opcion, String actvidad, Double viativos, String UID, int position) {
-        if(opcion.equals(statics.VALIDA_SPINNER)){
-            showAlertUpdate();
-            Toast.makeText(ReporteActividades.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
-        }else if(actvidad.length()==0){
-            showAlertUpdate();
-            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
-        }else if(viativos==0.0){
-            showAlertUpdate();
-            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
-        }else{
-            act.setActRealizada(actvidad);
-            act.setFecha(listActividades.get(position).getFecha());
-            act.setHora(listActividades.get(position).getHora());
-            act.setLatitud(listActividades.get(position).getLatitud());
-            act.setLongitud(listActividades.get(position).getLongitud());
-            act.setNombre(listActividades.get(position).getNombre());
-            act.setOpcion(opcion);
-            act.setPath(listActividades.get(position).getPath());
-            act.setRazonSocial(listActividades.get(position).getRazonSocial());
-            act.setRecord(listActividades.get(position).getRecord());
-            act.setStatus(listActividades.get(position).getStatus());
-            act.setUrl(listActividades.get(position).getUrl());
-            act.setViaticos(viativos);
-            act.setPrograming(listActividades.get(position).getPrograming());
+    public void subirFotoFirebase(final int posRecord,final int posBitacora) {
 
-            int comprueva = listActividades.get(position).getPrograming();
-            if(comprueva != 0) {
-                p.databaseReference
-                        .child("Bitacora")
-                        .child(EMPRESA)
-                        .child("actividades")
-                        .child("usuarios")
-                        .child(myIMEI)
-                        .child(UID)
-                        .setValue(act);
-            }else {
-                p.databaseReference
-                        .child("Bitacora")
-                        .child(EMPRESA)
-                        .child("actividades")
-                        .child("usuarios")
-                        .child(myIMEI)
-                        .child(statics.NO_PROGRAMADA)
-                        .child(UID)
-                        .setValue(act);
-            }
-        }
-    }
-
-    public void validaInternet(){
-        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                connected = snapshot.getValue(Boolean.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    public void subirFotoFirebase(final int pos) {
-        StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos));
+        StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
         byte[] data = new byte[0];
         try{
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(posBitacora));
             Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             data = baos.toByteArray();
@@ -347,9 +274,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                             Toast.makeText(ReporteActividades.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             throw task.getException();
                         }else{
-                            downloadImageUrl = p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos)).getDownloadUrl().toString();
+                            downloadImageUrl = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl().toString();
                         }
-                        return p.storageRef.child(EMPRESA+"/"+namePhoto.get(pos)).getDownloadUrl();
+                        return p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
@@ -357,50 +284,38 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         if (task.isSuccessful()) {
                             downloadImageUrl = task.getResult().toString();
                             // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
-                            listActividades.get(pos).setUrl(downloadImageUrl);
+                            listActividades.get(posBitacora).setUrl(downloadImageUrl);
                             final HashMap<String, Object> productMap = new HashMap<>();
-
                             productMap.put("url", downloadImageUrl);
                             productMap.put("status", 2);
-
                             p.databaseReference
                                     .child("Bitacora")
                                     .child(EMPRESA)
                                     .child("actividades")
                                     .child("usuarios")
                                     .child(myIMEI)
-                                    .child(UID.get(pos)).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora)).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.exists()){
-                                        p.databaseReference
-                                                .child("Bitacora")
-                                                .child(EMPRESA)
-                                                .child("actividades")
-                                                .child("usuarios")
-                                                .child(myIMEI)
-                                                .child(UID.get(pos))
-                                                .updateChildren(productMap);
-//                                        progressDoalog.dismiss();
-                                        uploadQuickBase(pos);
-                                    }else{
-                                        p.databaseReference
-                                                .child("Bitacora")
-                                                .child(EMPRESA)
-                                                .child("actividades")
-                                                .child("usuarios")
-                                                .child(myIMEI)
-                                                .child(statics.NO_PROGRAMADA)
-                                                .child(UID.get(pos))
-                                                .updateChildren(productMap);
-
-                                        uploadQuickBase(pos);
-                                    }
+                                    Bitacora bit = new Bitacora();
+                                    try{
+                                        bit = dataSnapshot.getValue(Bitacora.class);
+                                    }catch (Exception e){}
+                                            if(dataSnapshot.exists() && bit.getStatus()==1){
+                                                p.databaseReference
+                                                        .child("Bitacora")
+                                                        .child(EMPRESA)
+                                                        .child("actividades")
+                                                        .child("usuarios")
+                                                        .child(myIMEI)
+                                                        .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora))
+                                                        .updateChildren(productMap);
+                                                uploadQuickBase(posBitacora);
+                                            }
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                    hilo.interrupt();
                                 }
                             });
                             bar.setVisibility(View.GONE);
@@ -430,24 +345,21 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 progres.setText(format.format(progress)  + " %");
             }
         });
-
     }
 
     void uploadQuickBase(int position){
-
         String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnu3r2cfy?a=API_AddRecord"
                 +"&_fid_17="+listActividades.get(position).getRecord()+ //Record ID
                 "&_fid_9="  +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Latitud&atLongitud
                 "&_fid_18=" +myIMEI+ // Imei
                 "&_fid_6="  +listActividades.get(position).getActRealizada()+ //Descripcion de actividad
-                "&_fid_7="  +listActividades.get(position).getHora()+// Hora de registro
+                "&_fid_7="  +listActividades.get(position).getFechaRegistro()+// Hora de registro
                 "&_fid_19=" +listActividades.get(position).getOpcion()+ // Tipo de actividad
                 "&_fid_20=" + listActividades.get(position).getViaticos()+// Viaticos consumidos
                 "&_fid_23=" +listActividades.get(position).getRazonSocial()+ // Razon social
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
                 "&apptoken=" + token;
-
         try{
             new CargarDatos().execute(Query.replace(" ", "%20"));
             Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
@@ -455,6 +367,73 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+
+    public void validaInternet(){
+        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                connected = snapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void getTextDialogFregment(String opcion, int opcSelect, String actvidad, Double viativos, String Record, String uidBitacora, int position) {
+        if(opcion.equals(statics.VALIDA_SPINNER)){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
+        }else if(actvidad.length()==0){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
+        }else if(viativos==0.0){
+            showAlertUpdate();
+            Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
+        }else{
+
+            final HashMap<String, Object> productMap = new HashMap<>();
+
+            productMap.put("opcion", opcion);
+            productMap.put("selectopc", opcSelect);
+            productMap.put("actRealizada", actvidad);
+            productMap.put("viaticos", viativos);
+
+                p.databaseReference
+                        .child("Bitacora")
+                        .child(EMPRESA)
+                        .child("actividades")
+                        .child("usuarios")
+                        .child(myIMEI)
+                        .child(Record)
+                        .child(uidBitacora)
+                        .updateChildren(productMap);
+
+        }
+    }
+
+    class hiloprogress extends Thread{
+        public void run(){
+            Looper.prepare();
+            if(!hiloprogress.currentThread().isInterrupted()){
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            progressDoalog.setMessage("Subiendo información....");
+                            progressDoalog.setTitle("Por favor espera!");
+                            progressDoalog.setCancelable(false);
+                            progressDoalog.show();
+                    }
+                });
+                return;
+            }
+        }
     }
 
     class CargarDatos extends AsyncTask<String, Void, String> {
@@ -485,7 +464,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 if (resultado.equals("No error")) {
                     Log.d("Mensaje del Servidor", resultado);
                     try {
+                        hilo.isInterrupted();
                         progressDoalog.dismiss();
+                        finish();
                     } catch (Exception e) {
 //                            Toast.makeText(MainActivity.this, "Error al subir", Toast.LENGTH_SHORT).show();
                         System.out.println("error al subir: " + e.getMessage());

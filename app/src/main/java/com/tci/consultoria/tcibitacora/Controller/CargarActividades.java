@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Adapter.RecyclerAct;
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.Actividad;
+import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
 import com.tci.consultoria.tcibitacora.R;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
@@ -46,12 +46,12 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     private RecyclerView recycler_actividades;
     private SimpleDateFormat dateFormat;
     private RecyclerAct recyclerAct;
-    private ArrayList<Actividad> listActividades = new ArrayList<Actividad>();
-    public static ArrayList<Actividad> listFechaActividades = new ArrayList<Actividad>();
+    private ArrayList<ActividadNOProgramada> listActividades = new ArrayList<ActividadNOProgramada>();
+    public static ArrayList<ActividadNOProgramada> listFechaActividades = new ArrayList<ActividadNOProgramada>();
     private ArrayList<String> UID = new ArrayList<>();
     private boolean opcFechaSelected=true;
     Principal p = Principal.getInstance();
-    Actividad act = new Actividad();
+    ActividadNOProgramada act = new ActividadNOProgramada();
     LinearLayout ly_fechas;
     SimpleDateFormat dateFormatActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date dateActual = new Date();
@@ -154,7 +154,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 UID.clear();
                 for(DataSnapshot obSnapshot : dataSnapshot.getChildren()){
                     try {
-                        Actividad act = obSnapshot.getValue(Actividad.class);
+                        ActividadNOProgramada act = obSnapshot.getValue(ActividadNOProgramada.class);
 
                     String auxNoprogramada = obSnapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
@@ -210,7 +210,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 UID.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     try {
-                        Actividad act = snapshot.getValue(Actividad.class);
+                        ActividadNOProgramada act = snapshot.getValue(ActividadNOProgramada.class);
 
                     String auxNoprogramada = snapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
@@ -265,14 +265,10 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     }
 
     public void agregarActividad(int i){
-        if(listFechaActividades.get(i).getStatus()==0){
             Intent intent = new Intent(CargarActividades.this,AgregarActividad.class);
-            intent.putExtra("UID",UID.get(i));
+            intent.putExtra("RECORD",UID.get(i));
             intent.putExtra("actividad","Nombre de actividad: "+listFechaActividades.get(i).getNombre());
             intent.putExtra("posicion",i);
             startActivity(intent);
-        }else{
-            Toast.makeText(CargarActividades.this,statics.TOAST_ACTIVIDAD_REALIZADA,Toast.LENGTH_SHORT).show();
-        }
     }
 }

@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Toast.makeText(this,"Bye",Toast.LENGTH_SHORT).show();
         stopService(intentservice);
         super.onDestroy();
     }

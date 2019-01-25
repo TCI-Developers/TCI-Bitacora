@@ -58,7 +58,6 @@ public class IntentService extends Service {
                 productMap.put("lat",latitud );
                 productMap.put("lgn", longitud);
                 productMap.put("hora", hora);
-
                 try {
                     p.databaseReference
                             .child("Bitacora")
@@ -97,7 +96,7 @@ public class IntentService extends Service {
 
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
-                Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
                 // For each start request, send a message to start a job and deliver the
                 // start ID so we know which request we're stopping when we finish the job
                 Message msg = mServiceHandler.obtainMessage();
@@ -116,9 +115,9 @@ public class IntentService extends Service {
 
         @Override
         public void onDestroy() {
-            Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, IntentService.class);
-            startService(intent);
+            //Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent("com.tci.consultoria.tcibitacora.Background.IntentService");
+            sendBroadcast(intent);
         }
 
     private void Mi_hubicacion() {

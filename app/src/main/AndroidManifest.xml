@@ -70,7 +70,16 @@
                 <action android:name="com.google.firebase.MESSAGIN_EVENT"/>
             </intent-filter>
         </service>
+
         <service android:name=".Background.IntentService" />
+
+        <receiver android:name=".Background.Receivercall" >
+            <intent-filter>
+                <action android:name="com.tci.consultoria.tcibitacora.Background.IntentService" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

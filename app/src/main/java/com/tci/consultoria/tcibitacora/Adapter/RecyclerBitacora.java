@@ -6,19 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
 import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
 import com.tci.consultoria.tcibitacora.R;
 
 import java.util.ArrayList;
 
-
-public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesViewHolder> {
+public class RecyclerBitacora extends RecyclerView.Adapter<RecyclerBitacora.ActividadesViewHolder> {
 
     ArrayList<ActividadNOProgramada> listRegistro;
     private RecyclerViewClick click;
 
-    public RecyclerAct(ArrayList<ActividadNOProgramada> listRegistro, RecyclerViewClick click) {
+    public RecyclerBitacora(ArrayList<ActividadNOProgramada> listRegistro, RecyclerViewClick click) {
         this.listRegistro = listRegistro;
         this.click = click;
     }
@@ -26,16 +27,16 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
 
     @NonNull
     @Override
-    public ActividadesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public RecyclerBitacora.ActividadesViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actividades_row,null, false);
-        return new RecyclerAct.ActividadesViewHolder(v);
+        return  new ActividadesViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ActividadesViewHolder actividadesViewHolder, int i) {
-        actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
-        actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getRazonSocial());
-        actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFecha());
+        actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre()+" - "+listRegistro.get(i).getActRealizada());
+        actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getRecord());
+        actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFechaRegistro());
     }
 
     @Override
