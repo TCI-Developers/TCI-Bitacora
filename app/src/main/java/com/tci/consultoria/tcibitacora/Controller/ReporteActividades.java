@@ -397,7 +397,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             showAlertUpdate();
             Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
         }else{
-
             final HashMap<String, Object> productMap = new HashMap<>();
 
             productMap.put("opcion", opcion);
@@ -414,7 +413,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         .child(Record)
                         .child(uidBitacora)
                         .updateChildren(productMap);
-
+            cargaActividades();
         }
     }
 
@@ -466,7 +465,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     try {
                         hilo.isInterrupted();
                         progressDoalog.dismiss();
-                        finish();
+                        cargaActividades();
+                        //finish();
+
                     } catch (Exception e) {
 //                            Toast.makeText(MainActivity.this, "Error al subir", Toast.LENGTH_SHORT).show();
                         System.out.println("error al subir: " + e.getMessage());
