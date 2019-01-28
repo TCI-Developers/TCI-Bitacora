@@ -1,6 +1,7 @@
 package com.tci.consultoria.tcibitacora;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,8 +37,6 @@ import com.tci.consultoria.tcibitacora.Controller.ReporteActividades;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
-import java.util.HashMap;
-
 public class MainActivity extends AppCompatActivity {
     private TelephonyManager mTelephony;
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_PHONE_STATE
     };
     private static final int REQUEST_CODE = 1;
-    private boolean IMEIVALIDO= false;
+    private boolean IMEIVALIDO = false;
     public static boolean connected;
     public static String rSOCIAL="";
     AlertDialog alert = null;
@@ -82,9 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if(android.os.Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O)
-            iniciarUbicacionreal();
-
+        if(android.os.Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O){
+            if (!isMyServiceRunning(IntentService.class))
+                iniciarUbicacionreal();
+        }
         veficaIMEI();
         super.onStart();
     }
@@ -98,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Activar", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-
                     }
                 });
         alert = builder.create();
@@ -210,6 +209,15 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName()))
+                return true;
+        }
+        return false;
+    }
+
     public void veficaIMEI(){
         getIMEI();
         p.databaseReference.child("Bitacora")
@@ -269,7 +277,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        stopService(intentservice);
+        if (isMyServiceRunning(IntentService.class))
+            stopService(intentservice);
         super.onDestroy();
     }
 }

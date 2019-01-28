@@ -40,8 +40,10 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Splashscreen">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,18 +53,22 @@
         <activity
             android:name=".Controller.ReporteActividades"
             android:label="@string/title_activity_reporte_actividades"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Controller.CargarActividades"
             android:label="@string/title_activity_cargar_actividades"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Controller.AgregarActividad"
             android:label="@string/title_activity_agregar_actividad"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"></activity>
 
         <service android:name=".Notification.MyFirebaseInstanceService">

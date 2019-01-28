@@ -31,7 +31,7 @@
             android:inputType="textCapSentences"
             android:paddingLeft="8dp"
             android:textColorLink="@color/colorPrimary"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -51,7 +51,7 @@
             android:inputType="numberDecimal"
             android:paddingLeft="8dp"
             android:textColorLink="@color/colorPrimary"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

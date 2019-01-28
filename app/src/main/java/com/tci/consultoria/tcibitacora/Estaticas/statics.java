@@ -21,6 +21,7 @@ public interface statics {
     public static final String RAZON_SOCIAL_TCI = "TCI Consultores";
     public static final String RAZON_SOCIAL_AGRO_TRANSPORTES = "TCI Agrotransportes de Michoacan";
     public static final String RAZON_SOCIAL_GRUPO_ARFI = "TCI Grupo Arfi";
+    public static final String RAZON_SOCIAL_RV = "RV Aguacates";
 
     public static final String BTN_ALERTDIALOG_CANCELAR = "Cancelar";
     public static final String BTN_ALERTDIALOG_ACTUALIZAR = "Actualizar";

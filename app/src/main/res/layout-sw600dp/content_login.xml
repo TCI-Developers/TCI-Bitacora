@@ -31,10 +31,10 @@
 
             <TextView
                 android:id="@+id/textView6"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="171dp"
+                android:layout_height="167dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/login" />
 
             <android.support.design.widget.TextInputLayout
@@ -54,8 +54,7 @@
                     android:inputType="textCapSentences"
                     android:paddingLeft="8dp"
                     android:textColorLink="@color/colorPrimary"
-
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -76,7 +75,7 @@
                     android:inputType="textPassword"
                     android:paddingLeft="8dp"
                     android:textColorLink="@color/colorPrimary"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
 
 
