@@ -474,11 +474,14 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     }
                 } else {
                     Log.d("Error de consulta", resultado);
-
+                    hilo.isInterrupted();
+                    progressDoalog.dismiss();
                 }
             } else {
                 /**En caso que respuesta sea null es por que fue error de http como los son;
                  * 404,500,403 etc*/
+                hilo.isInterrupted();
+                progressDoalog.dismiss();
                 Log.d("Error del Servidor ", result);
             }
         }
