@@ -25,22 +25,9 @@ public class Login extends AppCompatActivity {
     EditText txt_user, txt_pass;
     Principal p = Principal.getInstance();
     private FirebaseAuth.AuthStateListener authStateListener;
-    private static final int REQUEST_CODE = 1;
-    private static final String[] PERMISOS = {
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
-        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
-        int leer4 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED || leer4 == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(Login.this, PERMISOS, REQUEST_CODE);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -122,5 +109,7 @@ public class Login extends AppCompatActivity {
                 });
         }
     }
+
+
 
 }

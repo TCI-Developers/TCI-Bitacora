@@ -54,7 +54,6 @@ public class IntentService extends Service {
                 // Normally we would do some work here, like download a file.
                 // For our sample, we just sleep for 5 seconds.
                 final HashMap<String, Object> productMap = new HashMap<>();
-
                 productMap.put("lat",latitud );
                 productMap.put("lgn", longitud);
                 productMap.put("hora", hora);
@@ -84,8 +83,8 @@ public class IntentService extends Service {
                 HandlerThread thread = new HandlerThread("ServiceStartArguments",
                         Process.THREAD_PRIORITY_BACKGROUND);
                 thread.start();
-                Mi_hubicacion();
                 hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+                Mi_hubicacion();
                 // Get the HandlerThread's Looper and use it for our Handler
                 mServiceLooper = thread.getLooper();
                 mServiceHandler = new ServiceHandler(mServiceLooper);

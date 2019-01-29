@@ -44,10 +44,6 @@ public class MainActivity extends AppCompatActivity {
     Principal p = Principal.getInstance();
     public static String EMPRESA="";
     public static String myIMEI = "";
-    private static final String[] PERMISOS = {
-            Manifest.permission.READ_PHONE_STATE
-    };
-    private static final int REQUEST_CODE = 1;
     private boolean IMEIVALIDO = false;
     public static boolean connected;
     public static String rSOCIAL="";
@@ -55,8 +51,23 @@ public class MainActivity extends AppCompatActivity {
     LocationManager manager;
     private SwipeRefreshLayout swipeLoadImei;
     public static Intent intentservice;
+    private static final int REQUEST_CODE = 1;
+    private static final String[] PERMISOS = {
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int leer4 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED || leer4 == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(MainActivity.this, PERMISOS, REQUEST_CODE);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         swipeLoadImei.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                veficaIMEI();
+                //veficaIMEI();
                 swipeLoadImei.setRefreshing(false);
             }
         });
@@ -81,11 +92,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        if(android.os.Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O){
-            if (!isMyServiceRunning(IntentService.class))
-                iniciarUbicacionreal();
-        }
-        veficaIMEI();
+//        if(android.os.Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O){
+//            if (!isMyServiceRunning(IntentService.class))
+//                iniciarUbicacionreal();
+//        }
+        //veficaIMEI();
         super.onStart();
     }
 
@@ -228,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                     if(snapshot.getKey().equals(myIMEI)){
                         if(!IMEIVALIDO){
-                            iniciarUbicacionreal();
+                            if (!isMyServiceRunning(IntentService.class))
+                                iniciarUbicacionreal();
                         }
                         IMEIVALIDO = true;
                     }
@@ -281,4 +293,23 @@ public class MainActivity extends AppCompatActivity {
             stopService(intentservice);
         super.onDestroy();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    veficaIMEI();
+                    validaInternet();
+                } else {
+                    for(int i =0; i<permissions.length; i++){
+                        if(grantResults[i] < 0){
+                            Toast.makeText(getApplicationContext(), "Estos permisos "+permissions[i]+" son necesarios.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
