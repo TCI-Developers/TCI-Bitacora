@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:visibility="gone" />
 
             <android.support.v7.widget.CardView
@@ -43,18 +43,19 @@
                 android:foreground="?attr/selectableItemBackground"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
-            <LinearLayout
-                android:id="@+id/lyPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="214dp"
-                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imgPhoto"
+                <LinearLayout
+                    android:id="@+id/lyPhoto"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@mipmap/ic_tci" />
-            </LinearLayout>
+                    android:layout_height="342dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/imgPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/ic_tci" />
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
