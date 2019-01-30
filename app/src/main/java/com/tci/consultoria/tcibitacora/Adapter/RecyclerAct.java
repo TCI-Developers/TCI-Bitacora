@@ -12,6 +12,8 @@ import com.tci.consultoria.tcibitacora.R;
 
 import java.util.ArrayList;
 
+import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
+
 
 public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesViewHolder> {
 
@@ -33,9 +35,21 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
 
     @Override
     public void onBindViewHolder(@NonNull ActividadesViewHolder actividadesViewHolder, int i) {
-        actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
-        actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getRazonSocial());
-        actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFecha());
+        switch (EMPRESA){
+            case "tci":
+                actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
+                actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getRazonSocial());
+                actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFecha());
+                break;
+            case "rv":
+                actividadesViewHolder.txt_actividad.setText("Huerta: "+listRegistro.get(i).getNombre());
+                actividadesViewHolder.txtRazon.setText("Productor: "+listRegistro.get(i).getProductor());
+                actividadesViewHolder.txtUpFecha.setText("Contacto: "+listRegistro.get(i).getContacto()+
+                                            "\nFecha: "+ listRegistro.get(i).getFecha());
+                break;
+        }
+
+
     }
 
     @Override

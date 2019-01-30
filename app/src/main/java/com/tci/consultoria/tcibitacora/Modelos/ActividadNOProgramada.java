@@ -13,6 +13,8 @@ public class ActividadNOProgramada {
     private String razonSocial;
     private String record;
     private String opcion;
+    private String contacto;
+    private String productor;
     private int status;
     private String url;
     private Double viaticos;
@@ -147,5 +149,21 @@ public class ActividadNOProgramada {
 
     public void setPrograming(int programing) {
         this.programing = programing;
+    }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public String getProductor() {
+        return productor;
+    }
+
+    public void setProductor(String productor) {
+        this.productor = productor;
     }
 }

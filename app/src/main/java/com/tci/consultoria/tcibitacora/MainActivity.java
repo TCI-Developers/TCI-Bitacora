@@ -276,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
             case "tci":
                 rSOCIAL = statics.RAZON_SOCIAL_TCI;
                 break;
+            case "rv":
+                rSOCIAL = statics.RAZON_SOCIAL_TCI;
+                break;
         }
     }
 

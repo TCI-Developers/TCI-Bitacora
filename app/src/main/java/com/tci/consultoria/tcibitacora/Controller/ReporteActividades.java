@@ -348,6 +348,28 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     }
 
     void uploadQuickBase(int position){
+        String Query="";
+        switch (EMPRESA){
+            case "arfi":
+                //rSOCIAL = statics.RAZON_SOCIAL_GRUPO_ARFI;
+                break;
+            case "tci":
+                Query = datosTCI(position);
+                break;
+            case "rv":
+                //rSOCIAL = statics.RAZON_SOCIAL_TCI;
+                break;
+        }
+
+        try{
+            new CargarDatos().execute(Query.replace(" ", "%20"));
+            Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    public String datosTCI(int position){
         String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnu3r2cfy?a=API_AddRecord"
                 +"&_fid_17="+listActividades.get(position).getRecord()+ //Record ID
                 "&_fid_9="  +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Latitud&atLongitud
@@ -360,15 +382,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
                 "&apptoken=" + token;
-        try{
-            new CargarDatos().execute(Query.replace(" ", "%20"));
-            Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
-        } catch (Exception e){
-            Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
-        }
-
+        return Query;
     }
-
 
     public void validaInternet(){
         DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");

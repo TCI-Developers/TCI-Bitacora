@@ -14,6 +14,8 @@ public class Bitacora {
     private String record;
     private String razonSocial;
     private String nombre;
+    private String contacto;
+    private String productor;
 
     public Bitacora() {
 
@@ -121,5 +123,21 @@ public class Bitacora {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public String getProductor() {
+        return productor;
+    }
+
+    public void setProductor(String productor) {
+        this.productor = productor;
     }
 }
