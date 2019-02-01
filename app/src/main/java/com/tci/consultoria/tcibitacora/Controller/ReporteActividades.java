@@ -357,17 +357,15 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 Query = datosTCI(position);
                 break;
             case "rv":
-                //rSOCIAL = statics.RAZON_SOCIAL_TCI;
+                datosRV(position);
                 break;
         }
-
         try{
             new CargarDatos().execute(Query.replace(" ", "%20"));
             Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
         } catch (Exception e){
             Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
         }
-
     }
     public String datosTCI(int position){
         String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnu3r2cfy?a=API_AddRecord"
@@ -382,6 +380,26 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
                 "&apptoken=" + token;
+        return Query;
+    }
+
+    public String datosRV(int position){
+        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij?a=API_AddRecord"+
+//            "&_fid_112="+datosF.get(pos).getHuerta()+ //Huerta Nombre
+//                "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +//productor
+//                "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+//telefono
+//                "&_fid_115=" +datosF.get(pos).getTon_prox()+//toneladas aprox
+//                "&_fid_116=" +datosF.get(pos).getMunicipio()+//municipio
+//                "&_fid_108=" +myIMEI+//imei
+//                "&_fid_109=" +listActividades.get(position).getRecord()+//record
+//                "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
+//                "&_fid_7=" +datosF.get(pos).getCampoBitacora()+//campobitacora
+                "&_fid_87=" +URLEncoder.encode(listActividades.get(position).getUrl())+//ruta de la imagen
+                "&_fid_81=" +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//latitud,longitud
+                "&_fid_6=" +listActividades.get(position).getFechaRegistro()+//fecha,hora
+                "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
+                "&apptoken=" + token;
+
         return Query;
     }
 
@@ -408,7 +426,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         }else if(actvidad.length()==0){
             showAlertUpdate();
             Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_DESCRIPCION_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
-        }else if(viativos==0.0){
+        }else if(viativos<0){
             showAlertUpdate();
             Toast.makeText(ReporteActividades.this, statics.TOAST_ERROR_VIATICOS_ALERTDIALOG_ACTUALIZAR, Toast.LENGTH_LONG).show();
         }else{

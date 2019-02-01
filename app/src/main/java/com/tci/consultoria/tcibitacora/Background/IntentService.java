@@ -126,9 +126,9 @@ public class IntentService extends Service {
             ActivityCompat.requestPermissions((Activity) getApplicationContext(), PERMISOS, REQUEST_CODE);
         }
         manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
         Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar(local);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
     }
 
     LocationListener locationListener = new LocationListener() {
@@ -157,10 +157,11 @@ public class IntentService extends Service {
         if (location != null) {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
-        }else{
-            latitud = 19.3980857;
-            longitud = -102.0556112;
         }
+//        else{
+//            latitud = 19.3980857;
+//            longitud = -102.0556112;
+//        }
     }
     }
 
