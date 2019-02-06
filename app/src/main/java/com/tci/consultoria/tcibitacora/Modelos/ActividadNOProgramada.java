@@ -10,6 +10,7 @@ public class ActividadNOProgramada {
     private String nombre;
     private String path;
     private String cliente;
+    private String latlong;
     private int selectopc;
     private String razonSocial;
     private String record;
@@ -174,5 +175,13 @@ public class ActividadNOProgramada {
 
     public void setCliente(String cliente) {
         this.cliente = cliente;
+    }
+
+    public String getLatlong() {
+        return latlong;
+    }
+
+    public void setLatlong(String latlong) {
+        this.latlong = latlong;
     }
 }

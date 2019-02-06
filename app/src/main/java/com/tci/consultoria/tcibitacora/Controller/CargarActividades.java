@@ -15,7 +15,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -268,6 +267,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
             Intent intent = new Intent(CargarActividades.this,AgregarActividad.class);
             intent.putExtra("RECORD",UID.get(i));
             intent.putExtra("actividad","Nombre de actividad: "+listFechaActividades.get(i).getNombre());
+            intent.putExtra("latlonghue",listFechaActividades.get(i).getLatlong());
             intent.putExtra("posicion",i);
             startActivity(intent);
     }

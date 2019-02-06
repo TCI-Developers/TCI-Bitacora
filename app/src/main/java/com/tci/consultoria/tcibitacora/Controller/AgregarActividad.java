@@ -102,6 +102,7 @@ public class AgregarActividad extends AppCompatActivity {
     Date date = new Date();
     String fecha = dateFormat.format(date);
     String RECORD;
+    String latlongHUE;
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     String namePhoto = fecha+hora+"-"+EMPRESA;
     int pos;
@@ -158,9 +159,13 @@ public class AgregarActividad extends AppCompatActivity {
                 validaFormulario();
                 break;
             case R.id.btn_ubicacion:
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+"19.4114375"+","+"-102.0719253")); //o la direccion/consulta que quiera "http://maps.google.com/maps?q="+ myLatitude  +"," + myLongitude +"("+ labLocation + ")&iwloc=A&hl=es"
-                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                startActivity(intent);
+                if(latlongHUE!=null){
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+latlongHUE)); //o la direccion/consulta que quiera "http://maps.google.com/maps?q="+ myLatitude  +"," + myLongitude +"("+ labLocation + ")&iwloc=A&hl=es"
+                    intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this,"No existe ubicación.",Toast.LENGTH_LONG).show();
+                }
                 break;
 
             default:
@@ -173,7 +178,7 @@ public class AgregarActividad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
          getMenuInflater().inflate(R.menu.menu_actividad, menu);
-         if(EMPRESA.equals("arfi"))
+         if((EMPRESA.equals("arfi")||EMPRESA.equals("tci")) && RECORD !=null)
              menu.getItem(0).setVisible(true);
          else
              menu.getItem(0).setVisible(false);
@@ -190,7 +195,7 @@ public class AgregarActividad extends AppCompatActivity {
             nombreActividad = getIntent().getExtras().getString("actividad");
             pos = getIntent().getExtras().getInt("posicion");
             RECORD = getIntent().getExtras().getString("RECORD");
-
+            latlongHUE = getIntent().getExtras().getString("latlonghue");
         }catch (Exception e){
             txtActividad.setVisibility(View.GONE);
         }
