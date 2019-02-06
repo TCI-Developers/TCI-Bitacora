@@ -2,13 +2,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.tci.consultoria.tcibitacora.MainActivity">
+    <item android:id="@+id/btn_ubicacion"
+        android:icon="@drawable/ic_my_location"
+        app:showAsAction="ifRoom"
+        android:title="ubicacion"/>
+
     <item android:id="@+id/btn_foto"
         android:icon="@drawable/ic_camara"
         app:showAsAction="ifRoom"
-        android:title="delete"/>
+        android:title="foto"/>
 
     <item android:id="@+id/btn_agregar"
         android:icon="@drawable/ic_cloud_upload"
         app:showAsAction="ifRoom"
-        android:title="delete"/>
+        android:title="agregar"/>
+
+
+
 </menu>

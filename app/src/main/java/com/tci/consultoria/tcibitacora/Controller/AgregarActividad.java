@@ -157,6 +157,11 @@ public class AgregarActividad extends AppCompatActivity {
             case R.id.btn_agregar:
                 validaFormulario();
                 break;
+            case R.id.btn_ubicacion:
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+"19.4114375"+","+"-102.0719253")); //o la direccion/consulta que quiera "http://maps.google.com/maps?q="+ myLatitude  +"," + myLongitude +"("+ labLocation + ")&iwloc=A&hl=es"
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+                break;
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -168,6 +173,10 @@ public class AgregarActividad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
          getMenuInflater().inflate(R.menu.menu_actividad, menu);
+         if(EMPRESA.equals("arfi"))
+             menu.getItem(0).setVisible(true);
+         else
+             menu.getItem(0).setVisible(false);
         return true;
     }
 
@@ -339,7 +348,7 @@ public class AgregarActividad extends AppCompatActivity {
             bitacora.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
             bitacora.setRecord(listFechaActividades.get(pos).getRecord());
             bitacora.setNombre(listFechaActividades.get(pos).getNombre());
-
+            bitacora.setCliente(listFechaActividades.get(pos).getCliente());
             p.databaseReference
                     .child("Bitacora")
                     .child(EMPRESA)
@@ -473,10 +482,9 @@ public class AgregarActividad extends AppCompatActivity {
             ActivityCompat.requestPermissions(AgregarActividad.this, PERMISOS, REQUEST_CODE);
         }
         manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar(local);
-
     }
 
     LocationListener locationListener = new LocationListener() {

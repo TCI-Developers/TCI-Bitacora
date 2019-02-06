@@ -38,7 +38,7 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
         switch (EMPRESA){
             case "tci":
                 actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
-                actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getRazonSocial());
+                actividadesViewHolder.txtRazon.setText("Cliente: "+listRegistro.get(i).getCliente());
                 actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFecha());
                 break;
             case "rv":

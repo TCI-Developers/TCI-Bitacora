@@ -62,6 +62,7 @@ public class Login extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         p.firebaseAuth.addAuthStateListener(authStateListener);
+
     }
     public void init(){
         txt_user = findViewById(R.id.txt_user);

@@ -8,6 +8,7 @@ public class Bitacora {
     private String path;
     private int selectopc;
     private String opcion;
+    private String cliente;
     private int status;
     private String url;
     private Double viaticos;
@@ -139,5 +140,13 @@ public class Bitacora {
 
     public void setProductor(String productor) {
         this.productor = productor;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 }

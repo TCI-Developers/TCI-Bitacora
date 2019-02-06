@@ -9,6 +9,7 @@ public class ActividadNOProgramada {
     private Double longitud;
     private String nombre;
     private String path;
+    private String cliente;
     private int selectopc;
     private String razonSocial;
     private String record;
@@ -165,5 +166,13 @@ public class ActividadNOProgramada {
 
     public void setProductor(String productor) {
         this.productor = productor;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 }

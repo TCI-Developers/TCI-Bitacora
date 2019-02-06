@@ -64,7 +64,7 @@ public class IntentService extends Service {
                             .child("actividades")
                             .child("usuarios")
                             .child(myIMEI).updateChildren(productMap);
-                    Thread.sleep(300000);
+                    Thread.sleep(300000);//300000
                 } catch (InterruptedException e) {
                     // Restore interrupt status.
                     Thread.currentThread().interrupt();
@@ -126,7 +126,7 @@ public class IntentService extends Service {
             ActivityCompat.requestPermissions((Activity) getApplicationContext(), PERMISOS, REQUEST_CODE);
         }
         manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar(local);
     }
@@ -163,5 +163,5 @@ public class IntentService extends Service {
 //            longitud = -102.0556112;
 //        }
     }
-    }
+}
 

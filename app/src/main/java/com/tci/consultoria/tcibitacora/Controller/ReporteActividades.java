@@ -80,7 +80,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     private SwipeRefreshLayout swipeLoad;
     private int cont = 0;
     public ProgressDialog progressDoalog;
-    private static final String token = "b67cthncniw7b9bnuc4d4dh5hu6s";//token TCi Consultoria
+    //token TCi Consultoria
     private static final String Tiket = "9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928";
 
     @Override
@@ -351,18 +351,17 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         String Query="";
         switch (EMPRESA){
             case "arfi":
-                //rSOCIAL = statics.RAZON_SOCIAL_GRUPO_ARFI;
+                //Query = datosTCI(position);
                 break;
             case "tci":
                 Query = datosTCI(position);
                 break;
             case "rv":
-                datosRV(position);
+                Query = datosRV(position);
                 break;
         }
         try{
             new CargarDatos().execute(Query.replace(" ", "%20"));
-            Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
         } catch (Exception e){
             Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
         }
@@ -374,21 +373,36 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_18=" +myIMEI+ // Imei
                 "&_fid_6="  +listActividades.get(position).getActRealizada()+ //Descripcion de actividad
                 "&_fid_7="  +listActividades.get(position).getFechaRegistro()+// Hora de registro
-                "&_fid_19=" +listActividades.get(position).getOpcion()+ // Tipo de actividad
-                "&_fid_20=" + listActividades.get(position).getViaticos()+// Viaticos consumidos
+        "&_fid_19=" +listActividades.get(position).getOpcion()+ // Tipo de actividad
+                "&_fid_20=" +listActividades.get(position).getViaticos()+// Viaticos consumidos
                 "&_fid_23=" +listActividades.get(position).getRazonSocial()+ // Razon social
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
-                "&apptoken=" + token;
+                "&apptoken=" + statics.tokenTCI;
         return Query;
     }
 
     public String datosRV(int position){
-        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij?a=API_AddRecord"+
-//            "&_fid_112="+datosF.get(pos).getHuerta()+ //Huerta Nombre
-//                "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +//productor
-//                "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+//telefono
-//                "&_fid_115=" +datosF.get(pos).getTon_prox()+//toneladas aprox
+        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bpcw5zc8w?a=API_AddRecord"+
+                "&_fid_6="  +listActividades.get(position).getRecord()+//Record
+                "&_fid_7="  +listActividades.get(position).getActRealizada()+//Actividad realizada
+                "&_fid_8="  +listActividades.get(position).getFechaRegistro()+//Fecha de registro
+                "&_fid_10=" +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//latitud,longitud
+                "&_fid_16="+myIMEI+//IMEI
+                "&_fid_17="+listActividades.get(position).getOpcion()+//Tipo
+                "&_fid_18="+listActividades.get(position).getViaticos()+//Gasto
+                "&_fid_20="+URLEncoder.encode(listActividades.get(position).getUrl())+//URL de foto
+                "&ticket="  +Tiket+
+                "&apptoken=" + statics.tokenRV;
+        return Query;
+    }
+
+    public String datosArfi(int position){
+        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bpcw5zc8w?a=API_AddRecord"+
+//            "&_fid_6="+datosF.get(pos).getHuerta()+ //record
+//                "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +
+//                "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+
+//                "&_fid_115=" +datosF.get(pos).getTon_prox()+
 //                "&_fid_116=" +datosF.get(pos).getMunicipio()+//municipio
 //                "&_fid_108=" +myIMEI+//imei
 //                "&_fid_109=" +listActividades.get(position).getRecord()+//record
@@ -397,8 +411,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_87=" +URLEncoder.encode(listActividades.get(position).getUrl())+//ruta de la imagen
                 "&_fid_81=" +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//latitud,longitud
                 "&_fid_6=" +listActividades.get(position).getFechaRegistro()+//fecha,hora
-                "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
-                "&apptoken=" + token;
+                "&ticket="  +Tiket+
+                "&apptoken=" + "";
 
         return Query;
     }
@@ -496,6 +510,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 if (resultado.equals("No error")) {
                     Log.d("Mensaje del Servidor", resultado);
                     try {
+                        Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
                         hilo.isInterrupted();
                         progressDoalog.dismiss();
                         cargaActividades();
@@ -507,6 +522,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     }
                 } else {
                     Log.d("Error de consulta", resultado);
+                    Toast.makeText(getApplicationContext(), "Fallo QuickBase", Toast.LENGTH_LONG).show();
                     hilo.isInterrupted();
                     progressDoalog.dismiss();
                 }

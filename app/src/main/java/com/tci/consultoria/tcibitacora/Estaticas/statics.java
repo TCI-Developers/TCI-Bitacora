@@ -36,4 +36,9 @@ public interface statics {
     public static final String TOAST_VALIDA_INTERNET = "No tienes internet, verifica tu conexión";
     public static final String TOAST_VALIDA_DATOS_POR_SUBIR = "No tienes registros pendientes.";
     public static final String ERROR_FOTOGRAFIA = "La fotografia ya no se encuentra en el celular";
+
+    public static final String tokenTCI = "b67cthncniw7b9bnuc4d4dh5hu6s";
+    public static final String tokenRV = "bp9chqje532g5cz95empciw4qnu";
+    public static final String tokenARFI = "dbc5meucnmvnmvbjz4wdrb34ssne";
+
 }
