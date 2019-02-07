@@ -56,6 +56,7 @@ import java.util.HashMap;
 
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
+import static com.tci.consultoria.tcibitacora.MainActivity.nombreEmpleado;
 import static com.tci.consultoria.tcibitacora.MainActivity.rSOCIAL;
 
 public class ReporteActividades extends AppCompatActivity implements AlertUpdate.DialogListener{
@@ -406,7 +407,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_15="+listActividades.get(position).getOpcion()+//Tipo
                 "&_fid_16="+listActividades.get(position).getViaticos()+
                 "&_fid_17="+myIMEI+
-                "&_fid_47"+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
+                //"&_fid_28="+nombreEmpleado+
+                "&_fid_47="+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
                 "&ticket="+Tiket+
                 "&apptoken="+statics.tokenGROSA;
         return Query;
@@ -537,7 +539,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     }
                 } else {
                     Log.d("Error de consulta", resultado);
-                    Toast.makeText(getApplicationContext(), "Fallo QuickBase", Toast.LENGTH_LONG).show();
                     hilo.isInterrupted();
                     progressDoalog.dismiss();
                     Toast.makeText(getApplicationContext(), "Error: "+resultado, Toast.LENGTH_LONG).show();
