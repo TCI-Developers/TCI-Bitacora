@@ -52,6 +52,11 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
                 actividadesViewHolder.txtRazon.setText("Cliente: "+listRegistro.get(i).getCliente());
                 actividadesViewHolder.txtUpFecha.setText("Fecha: "+ listRegistro.get(i).getFecha());
                 break;
+            case "grosa":
+                actividadesViewHolder.txt_actividad.setText("Act. Reg: "+listRegistro.get(i).getNombre());
+                actividadesViewHolder.txtRazon.setText("Ruta: "+listRegistro.get(i).getRuta());
+                actividadesViewHolder.txtUpFecha.setText("Fecha: "+listRegistro.get(i).getFecha());
+                break;
         }
 
 

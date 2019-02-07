@@ -2,6 +2,7 @@ package com.tci.consultoria.tcibitacora.Modelos;
 
 public class ActividadNOProgramada {
     private String actRealizada;
+    private String ruta;
     private String fecha;
     private String fechaRegistro;
     private String hora;
@@ -183,5 +184,14 @@ public class ActividadNOProgramada {
 
     public void setLatlong(String latlong) {
         this.latlong = latlong;
+    }
+
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
     }
 }

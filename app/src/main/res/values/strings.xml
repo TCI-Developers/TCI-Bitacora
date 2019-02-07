@@ -11,6 +11,7 @@
     <string name="hint_agregar_actividad_nombre">Nombre actividad</string>
     <string name="hint_agregar_actividad_act_realiza">Descripcion de actividad realizada</string>7
     <string name="hint_agregar_actividad_viaticos">Viáticos consumidos</string>
+    <string name="hint_agregar_actividad_importe">Importe</string>
     <string name="hint_login_user">Usuario</string>
     <string name="hint_login_pass">Contraseña</string>
 

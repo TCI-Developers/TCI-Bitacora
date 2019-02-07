@@ -126,6 +126,7 @@ public class AgregarActividad extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         init();
         Mi_hubicacion();
+        //if(EMPRESA.equals("grosa")) txtViaticos.setHint(R.string.hint_agregar_actividad_importe);
         imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +160,7 @@ public class AgregarActividad extends AppCompatActivity {
                 validaFormulario();
                 break;
             case R.id.btn_ubicacion:
-                if(latlongHUE!=null){
+                if(latlongHUE!=null && !latlongHUE.equals("0.0,0.0")){
                     Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?daddr="+latlongHUE)); //o la direccion/consulta que quiera "http://maps.google.com/maps?q="+ myLatitude  +"," + myLongitude +"("+ labLocation + ")&iwloc=A&hl=es"
                     intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
                     startActivity(intent);
@@ -178,7 +179,7 @@ public class AgregarActividad extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
          getMenuInflater().inflate(R.menu.menu_actividad, menu);
-         if((EMPRESA.equals("arfi")||EMPRESA.equals("tci")) && RECORD !=null)
+         if((EMPRESA.equals("arfi")||EMPRESA.equals("tci")||EMPRESA.equals("grosa")) && RECORD !=null)
              menu.getItem(0).setVisible(true);
          else
              menu.getItem(0).setVisible(false);

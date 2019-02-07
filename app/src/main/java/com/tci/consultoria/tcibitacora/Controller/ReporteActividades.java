@@ -180,7 +180,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         listActividades = new ArrayList<>();
         progressDoalog = new ProgressDialog(ReporteActividades.this);
     }
-    int x;
     public void cargaActividades(){
         p.databaseReference.child("Bitacora")
                 .child(EMPRESA)
@@ -192,7 +191,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 namePhoto.clear();
                 imgRUTA.clear();
                 UID_BITACORA.clear();
-                x=0;
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     try{
                         for (DataSnapshot snapshot1:snapshot.getChildren()) {
@@ -207,7 +205,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                 imgRUTA.add(bitacora.getPath());
                             }
                         }
-                        x++;
                     }catch (Exception e) {
                     }
                 }
@@ -359,6 +356,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             case "rv":
                 Query = datosRV(position);
                 break;
+            case "grosa":
+                Query = datosGasRosa(position);
+                break;
         }
         try{
             new CargarDatos().execute(Query.replace(" ", "%20"));
@@ -373,7 +373,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_18=" +myIMEI+ // Imei
                 "&_fid_6="  +listActividades.get(position).getActRealizada()+ //Descripcion de actividad
                 "&_fid_7="  +listActividades.get(position).getFechaRegistro()+// Hora de registro
-        "&_fid_19=" +listActividades.get(position).getOpcion()+ // Tipo de actividad
+                "&_fid_19=" +listActividades.get(position).getOpcion()+ // Tipo de actividad
                 "&_fid_20=" +listActividades.get(position).getViaticos()+// Viaticos consumidos
                 "&_fid_23=" +listActividades.get(position).getRazonSocial()+ // Razon social
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
@@ -394,6 +394,21 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_20="+URLEncoder.encode(listActividades.get(position).getUrl())+//URL de foto
                 "&ticket="  +Tiket+
                 "&apptoken=" + statics.tokenRV;
+        return Query;
+    }
+
+    public String datosGasRosa(int position){
+        String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnv2j828a?a=API_AddRecord"
+                +"&_fid_21="+listActividades.get(position).getRecord()+//RecordID
+                "&_fid_7="+listActividades.get(position).getFechaRegistro()+//Fecha de registro
+                "&_fid_6="+listActividades.get(position).getActRealizada()+//Actividad REalizada
+                "&_fid_9="+listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Ubicacion
+                "&_fid_15="+listActividades.get(position).getOpcion()+//Tipo
+                "&_fid_16="+listActividades.get(position).getViaticos()+
+                "&_fid_17="+myIMEI+
+                "&_fid_47"+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
+                "&ticket="+Tiket+
+                "&apptoken="+statics.tokenGROSA;
         return Query;
     }
 
@@ -525,6 +540,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     Toast.makeText(getApplicationContext(), "Fallo QuickBase", Toast.LENGTH_LONG).show();
                     hilo.isInterrupted();
                     progressDoalog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Error: "+resultado, Toast.LENGTH_LONG).show();
                 }
             } else {
                 /**En caso que respuesta sea null es por que fue error de http como los son;
@@ -532,6 +548,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 hilo.isInterrupted();
                 progressDoalog.dismiss();
                 Log.d("Error del Servidor ", result);
+                Toast.makeText(getApplicationContext(), "Error: "+result, Toast.LENGTH_LONG).show();
             }
         }
     }

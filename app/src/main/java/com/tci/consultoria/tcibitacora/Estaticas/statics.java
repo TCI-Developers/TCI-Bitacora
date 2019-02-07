@@ -40,5 +40,6 @@ public interface statics {
     public static final String tokenTCI = "b67cthncniw7b9bnuc4d4dh5hu6s";
     public static final String tokenRV = "bp9chqje532g5cz95empciw4qnu";
     public static final String tokenARFI = "dbc5meucnmvnmvbjz4wdrb34ssne";
+    public static final String tokenGROSA = "drjtmyzdyxuzndb9ua9vbbk9vtu7";
 
 }

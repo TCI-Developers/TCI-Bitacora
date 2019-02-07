@@ -2,6 +2,7 @@ package com.tci.consultoria.tcibitacora.Modelos;
 
 public class Bitacora {
     private String actRealizada;
+    private String actividad;
     private String fechaRegistro;
     private Double latitud;
     private Double longitud;
@@ -149,4 +150,13 @@ public class Bitacora {
     public void setCliente(String cliente) {
         this.cliente = cliente;
     }
+
+    public String getActividad() {
+        return actividad;
+    }
+
+    public void setActividad(String actividad) {
+        this.actividad = actividad;
+    }
+
 }
