@@ -81,6 +81,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     private SwipeRefreshLayout swipeLoad;
     private int cont = 0;
     public ProgressDialog progressDoalog;
+    int contador=0;
     //token TCi Consultoria
     private static final String Tiket = "9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928";
 
@@ -144,23 +145,23 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 onBackPressed();
                 break;
             case R.id.btn_upload:
-                hilo = new hiloprogress();
-                hilo.start();
                 if(listActividades.size()!=0)  {
                     if(connected) {
+                        progressDoalog.setMessage("Subiendo información....");
+                        progressDoalog.setTitle("Por favor espera!");
+                        progressDoalog.setCancelable(false);
+                        progressDoalog.show();
                         for(int i = 0; i< RECORD.size(); i++){
                                 for(int j=0;j<imgRUTA.size();j++) {
                                     subirFotoFirebase(i,j);
                                 }
                         }
+
+                        //finish();
                     }else{
-                        hilo.interrupt();
-                        progressDoalog.dismiss();
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
                     }
               }else{
-                    hilo.interrupt();
-                    progressDoalog.dismiss();
                   Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_DATOS_POR_SUBIR, Toast.LENGTH_LONG).show();
               }
                 break;
@@ -256,9 +257,8 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             data = baos.toByteArray();
         }catch (Exception e){
-            Toast.makeText(getApplicationContext(), statics.ERROR_FOTOGRAFIA, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), statics.ERROR_FOTOGRAFIA, Toast.LENGTH_LONG).show();
         }
-
         uploadTask = path.putBytes(data);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -280,11 +280,13 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
+                            final HashMap<String, Object> productMap = new HashMap<>();
                             downloadImageUrl = task.getResult().toString();
                             // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
-                            listActividades.get(posBitacora).setUrl(downloadImageUrl);
-                            final HashMap<String, Object> productMap = new HashMap<>();
-                            productMap.put("url", downloadImageUrl);
+                            if(imgRUTA.get(posBitacora) != "") {
+                                listActividades.get(posBitacora).setUrl(downloadImageUrl);
+                                productMap.put("url", downloadImageUrl);
+                            }
                             productMap.put("status", 2);
                             p.databaseReference
                                     .child("Bitacora")
@@ -527,10 +529,15 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 if (resultado.equals("No error")) {
                     Log.d("Mensaje del Servidor", resultado);
                     try {
-                        Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
-                        hilo.isInterrupted();
-                        progressDoalog.dismiss();
-                        cargaActividades();
+                        if((contador+1)>=imgRUTA.size()){
+                            Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
+                            progressDoalog.dismiss();
+                            cargaActividades();
+                            contador=0;
+                            //finish();
+                        }
+                        contador++;
+                        //cargaActividades();
                         //finish();
 
                     } catch (Exception e) {
@@ -539,14 +546,12 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     }
                 } else {
                     Log.d("Error de consulta", resultado);
-                    hilo.isInterrupted();
                     progressDoalog.dismiss();
                     Toast.makeText(getApplicationContext(), "Error: "+resultado, Toast.LENGTH_LONG).show();
                 }
             } else {
                 /**En caso que respuesta sea null es por que fue error de http como los son;
                  * 404,500,403 etc*/
-                hilo.isInterrupted();
                 progressDoalog.dismiss();
                 Log.d("Error del Servidor ", result);
                 Toast.makeText(getApplicationContext(), "Error: "+result, Toast.LENGTH_LONG).show();

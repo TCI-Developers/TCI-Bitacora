@@ -91,7 +91,7 @@ public class AgregarActividad extends AppCompatActivity {
     private String downloadImageUrl;
     EditText txtActividadRealizada,txtViaticos,txtNombreActividad;
     Principal p = Principal.getInstance();
-    public static String mCurrentPhotoPath;
+    public static String mCurrentPhotoPath="";
     LocationManager manager;
     UploadTask uploadTask = null;
     private Double latitud=0.0;
@@ -290,20 +290,26 @@ public class AgregarActividad extends AppCompatActivity {
         });
     }
 
+//    if(spnOpcion.getSelectedItem().toString().equals(statics.VALIDA_SPINNER)){
+//        Toast.makeText(AgregarActividad.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
+//    }else if(txtNombreActividad.getVisibility() != View.GONE && txtNombreActividad.getText().length()==0){
+//        txtNombreActividad.setError(statics.VALIDA_ERROR_NOMBRE_ACTIVIDAD);
+//    }else if(txtActividadRealizada.getText().length()==0){
+//        txtActividadRealizada.setError(statics.VALIDA_ERROR_ACT_REALIZADA);
+//    }else if(txtViaticos.getText().length()==0){
+//        txtViaticos.setError(statics.VALIDA_ERROR_VIATICOS);
+//    }else if(mCurrentPhotoPath==null){
+//        Toast.makeText(AgregarActividad.this, statics.VALIDA_ERROR_FOTO, Toast.LENGTH_LONG).show();
+//    }else{
+//        guardarDatos();
+//        mCurrentPhotoPath = null;
+//    }
+
     public void validaFormulario(){
         if(spnOpcion.getSelectedItem().toString().equals(statics.VALIDA_SPINNER)){
             Toast.makeText(AgregarActividad.this, statics.VALIDA_ERROR_APINNER, Toast.LENGTH_LONG).show();
-        }else if(txtNombreActividad.getVisibility() != View.GONE && txtNombreActividad.getText().length()==0){
-            txtNombreActividad.setError(statics.VALIDA_ERROR_NOMBRE_ACTIVIDAD);
-        }else if(txtActividadRealizada.getText().length()==0){
-            txtActividadRealizada.setError(statics.VALIDA_ERROR_ACT_REALIZADA);
-        }else if(txtViaticos.getText().length()==0){
-            txtViaticos.setError(statics.VALIDA_ERROR_VIATICOS);
-        }else if(mCurrentPhotoPath==null){
-            Toast.makeText(AgregarActividad.this, statics.VALIDA_ERROR_FOTO, Toast.LENGTH_LONG).show();
         }else{
             guardarDatos();
-            mCurrentPhotoPath = null;
         }
     }
     String UUID = null;
@@ -317,12 +323,18 @@ public class AgregarActividad extends AppCompatActivity {
             Toast.makeText(AgregarActividad.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
             finish();
         }
+        mCurrentPhotoPath = "";
     }
 
     public void statusfirebase(int status){
-        UUID = java.util.UUID.randomUUID().toString();
-        act.setActRealizada(txtActividadRealizada.getText().toString());
-        actRealizada = txtActividadRealizada.getText().toString();
+        UUID = "1"+java.util.UUID.randomUUID().toString();
+        if(txtActividadRealizada.getText().toString().length()!=0){
+            act.setActRealizada(txtActividadRealizada.getText().toString());
+            actRealizada = txtActividadRealizada.getText().toString();
+        }else{
+            act.setActRealizada("Sin desc.");
+            actRealizada = "Sin desc.";
+        }
         act.setHora(hora);
         horaquick = hora;
         act.setLatitud(latitud);
@@ -335,7 +347,10 @@ public class AgregarActividad extends AppCompatActivity {
         act.setFechaRegistro(fecha+" "+horaquick);
         act.setStatus(status);
         act.setUrl("");
-        act.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+        if(txtViaticos.getText().toString().length()!=0)
+            act.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+        else
+            act.setViaticos(Double.parseDouble("0"));
         viaticos = txtViaticos.getText().toString();
         if(RECORD != null){
             //act.setPrograming(1);
@@ -351,7 +366,11 @@ public class AgregarActividad extends AppCompatActivity {
             bitacora.setSelectopc(spnOpcion.getSelectedItemPosition());
             bitacora.setStatus(status);
             bitacora.setUrl("");
-            bitacora.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+            if(txtViaticos.getText().toString().length()!=0)
+                bitacora.setViaticos(Double.parseDouble(txtViaticos.getText().toString()));
+            else
+                bitacora.setViaticos(Double.parseDouble("0"));
+
             bitacora.setRecord(listFechaActividades.get(pos).getRecord());
             bitacora.setNombre(listFechaActividades.get(pos).getNombre());
             bitacora.setCliente(listFechaActividades.get(pos).getCliente());
@@ -370,7 +389,11 @@ public class AgregarActividad extends AppCompatActivity {
             act.setRazonSocial(rSOCIAL);
             rSocial = rSOCIAL;
             //act.setPrograming(0);
-            act.setNombre(txtNombreActividad.getText().toString());
+            if(txtNombreActividad.getText().toString().length()!=0)
+                act.setNombre(txtNombreActividad.getText().toString());
+            else
+                act.setNombre("Sin nombre");
+
             p.databaseReference
                     .child("Bitacora")
                     .child(EMPRESA)
