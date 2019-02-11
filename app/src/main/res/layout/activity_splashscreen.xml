@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="  Versión: 2.0.2"
+                android:text="@string/text_version_app"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:textSize="10sp"

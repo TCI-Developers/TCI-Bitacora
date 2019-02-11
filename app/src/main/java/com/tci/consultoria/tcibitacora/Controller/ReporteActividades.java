@@ -152,7 +152,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         progressDoalog.setCancelable(false);
                         progressDoalog.show();
                         for(int i = 0; i< RECORD.size(); i++){
-                                for(int j=0;j<imgRUTA.size();j++) {
+                                for(int j=0;j<UID_BITACORA.size();j++) {
                                     subirFotoFirebase(i,j);
                                 }
                         }
