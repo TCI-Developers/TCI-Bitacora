@@ -49,7 +49,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tci.consultoria.tcibitacora.Adapter.SpinnerOpc;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
 import com.tci.consultoria.tcibitacora.Modelos.opciones;
 import com.tci.consultoria.tcibitacora.QuickBase.ParseXmlData;
@@ -96,7 +96,7 @@ public class AgregarActividad extends AppCompatActivity {
     UploadTask uploadTask = null;
     private Double latitud=0.0;
     private Double longitud=0.0;
-    ActividadNOProgramada act = new ActividadNOProgramada();
+    Actividad act = new Actividad();
     Bitacora bitacora = new Bitacora();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date date = new Date();
@@ -511,8 +511,8 @@ public class AgregarActividad extends AppCompatActivity {
             ActivityCompat.requestPermissions(AgregarActividad.this, PERMISOS, REQUEST_CODE);
         }
         manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        Location local = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         actualizar(local);
     }
 
@@ -542,9 +542,6 @@ public class AgregarActividad extends AppCompatActivity {
         if (location != null) {
             latitud = location.getLatitude();
             longitud = location.getLongitude();
-        }else{
-            latitud = 19.3980857;
-            longitud = -102.0556112;
         }
     }
 

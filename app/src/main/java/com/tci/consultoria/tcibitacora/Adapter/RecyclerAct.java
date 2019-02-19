@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
-import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.R;
 
 import java.util.ArrayList;
@@ -17,10 +17,10 @@ import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 
 public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesViewHolder> {
 
-    ArrayList<ActividadNOProgramada> listRegistro;
+    ArrayList<Actividad> listRegistro;
     private RecyclerViewClick click;
 
-    public RecyclerAct(ArrayList<ActividadNOProgramada> listRegistro, RecyclerViewClick click) {
+    public RecyclerAct(ArrayList<Actividad> listRegistro, RecyclerViewClick click) {
         this.listRegistro = listRegistro;
         this.click = click;
     }

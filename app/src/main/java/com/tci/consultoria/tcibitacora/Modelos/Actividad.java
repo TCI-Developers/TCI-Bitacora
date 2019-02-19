@@ -1,6 +1,6 @@
 package com.tci.consultoria.tcibitacora.Modelos;
 
-public class ActividadNOProgramada {
+public class Actividad {
     private String actRealizada;
     private String ruta;
     private String fecha;
@@ -23,7 +23,7 @@ public class ActividadNOProgramada {
     private Double viaticos;
     private int programing;
 
-    public ActividadNOProgramada() {
+    public Actividad() {
     }
 
     public String getFechaRegistro() {

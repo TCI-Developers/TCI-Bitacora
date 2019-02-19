@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tci.consultoria.tcibitacora.Adapter.RecyclerAct;
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.R;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
@@ -45,12 +45,12 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
     private RecyclerView recycler_actividades;
     private SimpleDateFormat dateFormat;
     private RecyclerAct recyclerAct;
-    private ArrayList<ActividadNOProgramada> listActividades = new ArrayList<ActividadNOProgramada>();
-    public static ArrayList<ActividadNOProgramada> listFechaActividades = new ArrayList<ActividadNOProgramada>();
+    private ArrayList<Actividad> listActividades = new ArrayList<Actividad>();
+    public static ArrayList<Actividad> listFechaActividades = new ArrayList<Actividad>();
     private ArrayList<String> UID = new ArrayList<>();
     private boolean opcFechaSelected=true;
     Principal p = Principal.getInstance();
-    ActividadNOProgramada act = new ActividadNOProgramada();
+    Actividad act = new Actividad();
     LinearLayout ly_fechas;
     SimpleDateFormat dateFormatActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date dateActual = new Date();
@@ -153,7 +153,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 UID.clear();
                 for(DataSnapshot obSnapshot : dataSnapshot.getChildren()){
                     try {
-                        ActividadNOProgramada act = obSnapshot.getValue(ActividadNOProgramada.class);
+                        Actividad act = obSnapshot.getValue(Actividad.class);
 
                     String auxNoprogramada = obSnapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){
@@ -209,7 +209,7 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
                 UID.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     try {
-                        ActividadNOProgramada act = snapshot.getValue(ActividadNOProgramada.class);
+                        Actividad act = snapshot.getValue(Actividad.class);
 
                     String auxNoprogramada = snapshot.getKey();
                     if(!auxNoprogramada.equals(statics.NO_PROGRAMADA)){

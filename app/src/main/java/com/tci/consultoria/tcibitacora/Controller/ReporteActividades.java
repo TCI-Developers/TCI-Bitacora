@@ -35,12 +35,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.tci.consultoria.tcibitacora.Adapter.RecyclerAct;
 import com.tci.consultoria.tcibitacora.Adapter.RecyclerBitacora;
 import com.tci.consultoria.tcibitacora.AlertDialog.AlertUpdate;
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
 import com.tci.consultoria.tcibitacora.Estaticas.statics;
-import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
+import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
 import com.tci.consultoria.tcibitacora.QuickBase.ParseXmlData;
 import com.tci.consultoria.tcibitacora.QuickBase.Results;
@@ -56,13 +55,11 @@ import java.util.HashMap;
 
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
-import static com.tci.consultoria.tcibitacora.MainActivity.nombreEmpleado;
-import static com.tci.consultoria.tcibitacora.MainActivity.rSOCIAL;
 
 public class ReporteActividades extends AppCompatActivity implements AlertUpdate.DialogListener{
     Principal p = Principal.getInstance();
-    public static ArrayList<ActividadNOProgramada> listActividades;
-    ActividadNOProgramada act = new ActividadNOProgramada();
+    public static ArrayList<Actividad> listActividades;
+    Actividad act = new Actividad();
     private RecyclerBitacora recyclerActReport;
     private RecyclerView recyclerActividades;
     TextView textCartItemCount;
@@ -152,8 +149,13 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         progressDoalog.setCancelable(false);
                         progressDoalog.show();
                         for(int i = 0; i< RECORD.size(); i++){
-                                for(int j=0;j<UID_BITACORA.size();j++) {
-                                    subirFotoFirebase(i,j);
+                                for(int j=0;j<imgRUTA.size();j++) {
+                                    if(imgRUTA.get(j) != "") {
+                                        subirFotoFirebase(i, j);
+                                    }else if(listActividades.get(j).getStatus()!=2){
+                                        subirsinFoto(i,j);
+                                        listActividades.get(j).setStatus(2);
+                                    }
                                 }
                         }
 
@@ -197,7 +199,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     try{
                         for (DataSnapshot snapshot1:snapshot.getChildren()) {
                             Bitacora bitacora =  snapshot1.getValue(Bitacora.class);
-                            act = snapshot1.getValue(ActividadNOProgramada.class);
+                            act = snapshot1.getValue(Actividad.class);
                             int status = act.getStatus();
                             if (status < 2 && status > 0) {
                                 listActividades.add(act);
@@ -244,6 +246,41 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         alertUpdate.show(getSupportFragmentManager(),"actualizar");
     }
 
+    public void subirsinFoto(final int posRecord,final int posBitacora){
+        final HashMap<String, Object> productMap = new HashMap<>();
+        productMap.put("status", 2);
+        p.databaseReference
+                .child("Bitacora")
+                .child(EMPRESA)
+                .child("actividades")
+                .child("usuarios")
+                .child(myIMEI)
+                .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Bitacora bit = new Bitacora();
+                try{
+                    bit = dataSnapshot.getValue(Bitacora.class);
+                }catch (Exception e){}
+                if(dataSnapshot.exists() && bit.getStatus()==1){
+                    p.databaseReference
+                            .child("Bitacora")
+                            .child(EMPRESA)
+                            .child("actividades")
+                            .child("usuarios")
+                            .child(myIMEI)
+                            .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora))
+                            .updateChildren(productMap);
+                    uploadQuickBase(posBitacora);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void subirFotoFirebase(final int posRecord,final int posBitacora) {
 
         StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora));
@@ -254,7 +291,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         try{
             Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(posBitacora));
             Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 35, baos);
             data = baos.toByteArray();
         }catch (Exception e){
             //Toast.makeText(getApplicationContext(), statics.ERROR_FOTOGRAFIA, Toast.LENGTH_LONG).show();
@@ -283,10 +320,9 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                             final HashMap<String, Object> productMap = new HashMap<>();
                             downloadImageUrl = task.getResult().toString();
                             // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
-                            if(imgRUTA.get(posBitacora) != "") {
+
                                 listActividades.get(posBitacora).setUrl(downloadImageUrl);
                                 productMap.put("url", downloadImageUrl);
-                            }
                             productMap.put("status", 2);
                             p.databaseReference
                                     .child("Bitacora")
@@ -315,7 +351,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                 }
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    hilo.interrupt();
+
                                 }
                             });
                             bar.setVisibility(View.GONE);
@@ -351,7 +387,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         String Query="";
         switch (EMPRESA){
             case "arfi":
-                //Query = datosTCI(position);
+                Query = datosArfi(position);
                 break;
             case "tci":
                 Query = datosTCI(position);
@@ -417,22 +453,17 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     }
 
     public String datosArfi(int position){
-        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bpcw5zc8w?a=API_AddRecord"+
-//            "&_fid_6="+datosF.get(pos).getHuerta()+ //record
-//                "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +
-//                "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+
-//                "&_fid_115=" +datosF.get(pos).getTon_prox()+
-//                "&_fid_116=" +datosF.get(pos).getMunicipio()+//municipio
-//                "&_fid_108=" +myIMEI+//imei
-//                "&_fid_109=" +listActividades.get(position).getRecord()+//record
-//                "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
-//                "&_fid_7=" +datosF.get(pos).getCampoBitacora()+//campobitacora
-                "&_fid_87=" +URLEncoder.encode(listActividades.get(position).getUrl())+//ruta de la imagen
-                "&_fid_81=" +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//latitud,longitud
-                "&_fid_6=" +listActividades.get(position).getFechaRegistro()+//fecha,hora
-                "&ticket="  +Tiket+
-                "&apptoken=" + "";
-
+        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bn7iwf5g3?a=API_AddRecord"+
+               "&_fid_45=" +listActividades.get(position).getRecord()+//RecordID
+                "&_fid_7="+listActividades.get(position).getFechaRegistro()+//Fecha de registro
+                "&_fid_6="+listActividades.get(position).getActRealizada()+//Actividad REalizada
+                "&_fid_10="+listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Ubicacion
+                "&_fid_19="+listActividades.get(position).getOpcion()+//Tipo
+                "&_fid_20="+listActividades.get(position).getViaticos()+
+                "&_fid_41="+myIMEI+
+                "&_fid_24="+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
+                "&ticket="+Tiket+
+                "&apptoken="+statics.tokenARFI;
         return Query;
     }
 
@@ -532,7 +563,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         if((contador+1)>=imgRUTA.size()){
                             Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
                             progressDoalog.dismiss();
-                            cargaActividades();
+                            //cargaActividades();
                             contador=0;
                             //finish();
                         }

@@ -8,18 +8,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tci.consultoria.tcibitacora.Estaticas.RecyclerViewClick;
-import com.tci.consultoria.tcibitacora.Modelos.ActividadNOProgramada;
-import com.tci.consultoria.tcibitacora.Modelos.Bitacora;
+import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.R;
 
 import java.util.ArrayList;
 
 public class RecyclerBitacora extends RecyclerView.Adapter<RecyclerBitacora.ActividadesViewHolder> {
 
-    ArrayList<ActividadNOProgramada> listRegistro;
+    ArrayList<Actividad> listRegistro;
     private RecyclerViewClick click;
 
-    public RecyclerBitacora(ArrayList<ActividadNOProgramada> listRegistro, RecyclerViewClick click) {
+    public RecyclerBitacora(ArrayList<Actividad> listRegistro, RecyclerViewClick click) {
         this.listRegistro = listRegistro;
         this.click = click;
     }
