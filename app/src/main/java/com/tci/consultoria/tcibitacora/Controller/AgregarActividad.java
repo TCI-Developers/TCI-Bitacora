@@ -128,6 +128,7 @@ public class AgregarActividad extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mCurrentPhotoPath="";
         init();
         Mi_hubicacion();
         //if(EMPRESA.equals("grosa")) txtViaticos.setHint(R.string.hint_agregar_actividad_importe);

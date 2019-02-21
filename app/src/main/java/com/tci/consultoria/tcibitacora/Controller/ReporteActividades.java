@@ -78,7 +78,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     private SwipeRefreshLayout swipeLoad;
     private int cont = 0;
     public ProgressDialog progressDoalog;
-    int contador=0;
+    int contador=1;
     //token TCi Consultoria
     private static final String Tiket = "9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928";
 
@@ -498,14 +498,15 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 if (resultado.equals("No error")) {
                     Log.d("Mensaje del Servidor", resultado);
                     try {
-                        if((contador+1)>=imgRUTA.size()){
+                        if(contador>=imgRUTA.size()){
                             Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
                             progressDoalog.dismiss();
-                            //cargaActividades();
-                            contador=0;
+                            cargaActividades();
+                            contador=1;
                             //finish();
+                        }else{
+                            contador++;
                         }
-                        contador++;
                         //cargaActividades();
                         //finish();
 
