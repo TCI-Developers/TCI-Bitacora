@@ -276,10 +276,37 @@ public class MainActivity extends AppCompatActivity {
             case "arfi":
                 rSOCIAL = statics.RAZON_SOCIAL_GRUPO_ARFI;
                 break;
-            case "tci":
-                rSOCIAL = statics.RAZON_SOCIAL_TCI;
+            case "agrotras":
+                rSOCIAL = statics.RAZON_SOCIAL_AGRO_TRANSPORTES;
+                break;
+            case "bonanzachof":
+                rSOCIAL = statics.RAZON_SOCIAL_BONANZA;
+                break;
+            case "cao":
+                rSOCIAL = statics.RAZON_SOCIAL_CAO;
+                break;
+            case "hprimo":
+                rSOCIAL = statics.RAZON_SOCIAL_HPRIMO;
+                break;
+            case "mausoleos":
+                rSOCIAL = statics.RAZON_SOCIAL_MAUSOLEOS;
                 break;
             case "rv":
+                rSOCIAL = statics.RAZON_SOCIAL_RV;
+                break;
+            case "grosa":
+                rSOCIAL = statics.RAZON_SOCIAL_GROSA;
+                break;
+            case "avoking":
+                rSOCIAL = statics.RAZON_SOCIAL_AVOKING;
+                break;
+            case "biotox":
+                rSOCIAL = statics.RAZON_SOCIAL_BIOTOX;
+                break;
+            case "susazon":
+                rSOCIAL = statics.RAZON_SOCIAL_SUSAZON;
+                break;
+            case "tci":
                 rSOCIAL = statics.RAZON_SOCIAL_TCI;
                 break;
         }

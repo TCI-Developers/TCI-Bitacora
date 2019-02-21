@@ -384,28 +384,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     }
 
     void uploadQuickBase(int position){
-        String Query="";
-        switch (EMPRESA){
-            case "arfi":
-                Query = datosArfi(position);
-                break;
-            case "tci":
-                Query = datosTCI(position);
-                break;
-            case "rv":
-                Query = datosRV(position);
-                break;
-            case "grosa":
-                Query = datosGasRosa(position);
-                break;
-        }
-        try{
-            new CargarDatos().execute(Query.replace(" ", "%20"));
-        } catch (Exception e){
-            Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public String datosTCI(int position){
         String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnu3r2cfy?a=API_AddRecord"
                 +"&_fid_17="+listActividades.get(position).getRecord()+ //Record ID
                 "&_fid_9="  +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Latitud&atLongitud
@@ -418,54 +396,14 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
                 "&apptoken=" + statics.tokenTCI;
-        return Query;
+        try{
+            new CargarDatos().execute(Query.replace(" ", "%20"));
+        } catch (Exception e){
+            Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    public String datosRV(int position){
-        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bpcw5zc8w?a=API_AddRecord"+
-                "&_fid_6="  +listActividades.get(position).getRecord()+//Record
-                "&_fid_7="  +listActividades.get(position).getActRealizada()+//Actividad realizada
-                "&_fid_8="  +listActividades.get(position).getFechaRegistro()+//Fecha de registro
-                "&_fid_10=" +listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//latitud,longitud
-                "&_fid_16="+myIMEI+//IMEI
-                "&_fid_17="+listActividades.get(position).getOpcion()+//Tipo
-                "&_fid_18="+listActividades.get(position).getViaticos()+//Gasto
-                "&_fid_20="+URLEncoder.encode(listActividades.get(position).getUrl())+//URL de foto
-                "&ticket="  +Tiket+
-                "&apptoken=" + statics.tokenRV;
-        return Query;
-    }
 
-    public String datosGasRosa(int position){
-        String Query = "https://aortizdemontellanoarevalo.quickbase.com/db/bnv2j828a?a=API_AddRecord"
-                +"&_fid_21="+listActividades.get(position).getRecord()+//RecordID
-                "&_fid_7="+listActividades.get(position).getFechaRegistro()+//Fecha de registro
-                "&_fid_6="+listActividades.get(position).getActRealizada()+//Actividad REalizada
-                "&_fid_9="+listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Ubicacion
-                "&_fid_15="+listActividades.get(position).getOpcion()+//Tipo
-                "&_fid_16="+listActividades.get(position).getViaticos()+
-                "&_fid_17="+myIMEI+
-                //"&_fid_28="+nombreEmpleado+
-                "&_fid_47="+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
-                "&ticket="+Tiket+
-                "&apptoken="+statics.tokenGROSA;
-        return Query;
-    }
-
-    public String datosArfi(int position){
-        String Query ="https://aortizdemontellanoarevalo.quickbase.com/db/bn7iwf5g3?a=API_AddRecord"+
-               "&_fid_45=" +listActividades.get(position).getRecord()+//RecordID
-                "&_fid_7="+listActividades.get(position).getFechaRegistro()+//Fecha de registro
-                "&_fid_6="+listActividades.get(position).getActRealizada()+//Actividad REalizada
-                "&_fid_10="+listActividades.get(position).getLatitud()+","+listActividades.get(position).getLongitud()+//Ubicacion
-                "&_fid_19="+listActividades.get(position).getOpcion()+//Tipo
-                "&_fid_20="+listActividades.get(position).getViaticos()+
-                "&_fid_41="+myIMEI+
-                "&_fid_24="+URLEncoder.encode(listActividades.get(position).getUrl())+//Foto
-                "&ticket="+Tiket+
-                "&apptoken="+statics.tokenARFI;
-        return Query;
-    }
 
     public void validaInternet(){
         DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");

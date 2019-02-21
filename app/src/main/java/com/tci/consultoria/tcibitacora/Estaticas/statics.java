@@ -17,11 +17,19 @@ public interface statics {
 
     public static final String NO_PROGRAMADA = "no programada";
 
-    public static final String RAZON_SOCIAL_BONANZA = "TCI Bonanza";
+    public static final String RAZON_SOCIAL_BONANZA = "TCI Bonanza Choferes";
     public static final String RAZON_SOCIAL_TCI = "TCI Consultores";
-    public static final String RAZON_SOCIAL_AGRO_TRANSPORTES = "TCI Agrotransportes de Michoacan";
-    public static final String RAZON_SOCIAL_GRUPO_ARFI = "TCI Grupo Arfi";
-    public static final String RAZON_SOCIAL_RV = "RV Aguacates";
+    public static final String RAZON_SOCIAL_AGRO_TRANSPORTES = "TCI Agrotransportes";
+    public static final String RAZON_SOCIAL_GRUPO_ARFI = "TCI Arfi";
+    public static final String RAZON_SOCIAL_RV = "TCI Rv";
+    public static final String RAZON_SOCIAL_CAO = "TCI CAO";
+    public static final String RAZON_SOCIAL_HPRIMO = "TCI Huertas El Primo";
+    public static final String RAZON_SOCIAL_MAUSOLEOS = "TCI Mausoleos";
+    public static final String RAZON_SOCIAL_GROSA = "TCI Gasrosa";
+    public static final String RAZON_SOCIAL_AVOKING = "TCI Avoking";
+    public static final String RAZON_SOCIAL_BIOTOX = "TCI Biotox";
+    public static final String RAZON_SOCIAL_SUSAZON = "TCI Susazon";
+
 
     public static final String BTN_ALERTDIALOG_CANCELAR = "Cancelar";
     public static final String BTN_ALERTDIALOG_ACTUALIZAR = "Actualizar";

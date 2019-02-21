@@ -2,10 +2,12 @@ package com.tci.consultoria.tcibitacora.Controller;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,6 +21,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -93,6 +96,7 @@ public class AgregarActividad extends AppCompatActivity {
     Principal p = Principal.getInstance();
     public static String mCurrentPhotoPath="";
     LocationManager manager;
+    AlertDialog alert = null;
     UploadTask uploadTask = null;
     private Double latitud=0.0;
     private Double longitud=0.0;
@@ -184,6 +188,16 @@ public class AgregarActividad extends AppCompatActivity {
          else
              menu.getItem(0).setVisible(false);
         return true;
+    }
+
+    @Override
+    protected void onStart() {
+        manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            AlertNoGps();
+        }
+        super.onStart();
+
     }
 
     public void init(){
@@ -321,9 +335,7 @@ public class AgregarActividad extends AppCompatActivity {
         }else{
             statusfirebase(1);
             Toast.makeText(AgregarActividad.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
-            finish();
         }
-        mCurrentPhotoPath = "";
     }
 
     public void statusfirebase(int status){
@@ -387,7 +399,6 @@ public class AgregarActividad extends AppCompatActivity {
             act.setRecord("1");
             act.setFecha(fecha);
             act.setRazonSocial(rSOCIAL);
-            rSocial = rSOCIAL;
             //act.setPrograming(0);
             if(txtNombreActividad.getText().toString().length()!=0)
                 act.setNombre(txtNombreActividad.getText().toString());
@@ -404,6 +415,7 @@ public class AgregarActividad extends AppCompatActivity {
                     .child(UUID)
                     .setValue(act);
         }
+        mCurrentPhotoPath = "";
         finish();
     }
 
@@ -502,6 +514,22 @@ public class AgregarActividad extends AppCompatActivity {
                 Toast.makeText(AgregarActividad.this, "En el pausable", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void AlertNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.Theme_Dialog_Translucent);
+        builder.setTitle("GPS")
+                .setMessage(statics.ALERT_MESSAGE_GPS_DESACTIVADO)
+                .setIcon(R.drawable.ic_location_off)
+                .setCancelable(false)
+                .setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                });
+        alert = builder.create();
+        alert.show();
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.RED);
     }
 
     private void Mi_hubicacion() {

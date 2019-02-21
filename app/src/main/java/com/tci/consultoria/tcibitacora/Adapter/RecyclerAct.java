@@ -43,7 +43,7 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
                 break;
             case "rv":
                 actividadesViewHolder.txt_actividad.setText("Huerta: "+listRegistro.get(i).getNombre());
-                actividadesViewHolder.txtRazon.setText("Productor: "+listRegistro.get(i).getProductor());
+                actividadesViewHolder.txtRazon.setText("Productor: "+listRegistro.get(i).getCliente());
                 actividadesViewHolder.txtUpFecha.setText("Contacto: "+listRegistro.get(i).getContacto()+
                                             "\nFecha: "+ listRegistro.get(i).getFecha());
                 break;
@@ -54,9 +54,14 @@ public class RecyclerAct extends RecyclerView.Adapter<RecyclerAct.ActividadesVie
                 break;
             case "grosa":
                 actividadesViewHolder.txt_actividad.setText("Act. Reg: "+listRegistro.get(i).getNombre());
-                actividadesViewHolder.txtRazon.setText("Ruta: "+listRegistro.get(i).getRuta());
+                actividadesViewHolder.txtRazon.setText("Ruta: "+listRegistro.get(i).getCliente());
                 actividadesViewHolder.txtUpFecha.setText("Fecha: "+listRegistro.get(i).getFecha());
                 break;
+
+             default:
+                 actividadesViewHolder.txt_actividad.setText(listRegistro.get(i).getNombre());
+                 actividadesViewHolder.txtRazon.setText(listRegistro.get(i).getCliente());
+                 actividadesViewHolder.txtUpFecha.setText(listRegistro.get(i).getFecha());
         }
 
 
