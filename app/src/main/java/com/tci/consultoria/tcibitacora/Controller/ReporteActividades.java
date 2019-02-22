@@ -507,6 +507,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                         }else{
                             contador++;
                         }
+
                         //cargaActividades();
                         //finish();
 

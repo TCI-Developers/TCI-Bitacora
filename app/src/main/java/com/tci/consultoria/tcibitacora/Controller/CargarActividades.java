@@ -126,6 +126,10 @@ public class CargarActividades extends AppCompatActivity implements DatePickerDi
         date.show();
     }
     public void obtenerFechaFin(View view){
+        Calendar calendario = Calendar.getInstance();
+        dia = calendario.get(Calendar.DAY_OF_MONTH);
+        mes = calendario.get(Calendar.MONTH);
+        ano = calendario.get(Calendar.YEAR);
         Fecha = "fin";
         DatePickerDialog date  = new DatePickerDialog(CargarActividades.this, this, ano,mes,dia);
         date.show();

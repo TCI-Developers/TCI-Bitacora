@@ -29,6 +29,19 @@ public interface statics {
     public static final String RAZON_SOCIAL_AVOKING = "TCI Avoking";
     public static final String RAZON_SOCIAL_BIOTOX = "TCI Biotox";
     public static final String RAZON_SOCIAL_SUSAZON = "TCI Susazon";
+    public static final String RAZON_SOCIAL_ARRENDAMEX = "TCI Arrendamex";
+    public static final String RAZON_SOCIAL_DNOPLUS = "TCI Dnoplus";
+    public static final String RAZON_SOCIAL_SUNBELLE = "TCI Sunbelle";
+    public static final String RAZON_SOCIAL_MVD = "TCI Mvd";
+    public static final String RAZON_SOCIAL_LEDEZMA = "TCI Ledesma";
+    public static final String RAZON_SOCIAL_INVER = "TCI Inver";
+    public static final String RAZON_SOCIAL_EMCOR = "TCI Emcor";
+    public static final String RAZON_SOCIAL_CYLLID = "TCI Cyllid";
+    public static final String RAZON_SOCIAL_CARTOMICH = "TCI Cartomich";
+    public static final String RAZON_SOCIAL_FRYEN = "TCI Fryen";
+    public static final String RAZON_SOCIAL_ARMO = "TCI Armo";
+    public static final String RAZON_SOCIAL_IGLOO = "TCI Igloo";
+    public static final String RAZON_SOCIAL_ECOENLACE = "TCI Ecoenlace";
 
 
     public static final String BTN_ALERTDIALOG_CANCELAR = "Cancelar";

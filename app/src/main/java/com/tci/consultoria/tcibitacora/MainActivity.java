@@ -309,6 +309,46 @@ public class MainActivity extends AppCompatActivity {
             case "tci":
                 rSOCIAL = statics.RAZON_SOCIAL_TCI;
                 break;
+            case "arrendamex":
+                rSOCIAL = statics.RAZON_SOCIAL_ARRENDAMEX;
+                break;
+            case "dnoplus":
+                rSOCIAL = statics.RAZON_SOCIAL_DNOPLUS;
+                break;
+            case "sunbelle":
+                rSOCIAL = statics.RAZON_SOCIAL_SUNBELLE;
+                break;
+            case "mvd":
+                rSOCIAL = statics.RAZON_SOCIAL_MVD;
+                break;
+            case "ledesma":
+                rSOCIAL = statics.RAZON_SOCIAL_LEDEZMA;
+                break;
+            case "inver":
+                rSOCIAL = statics.RAZON_SOCIAL_INVER;
+                break;
+            case "emcor":
+                rSOCIAL = statics.RAZON_SOCIAL_EMCOR;
+                break;
+            case "cillyd":
+                rSOCIAL = statics.RAZON_SOCIAL_CYLLID;
+                break;
+            case "cartomich":
+                rSOCIAL = statics.RAZON_SOCIAL_CARTOMICH;
+                break;
+            case "fryen":
+                rSOCIAL = statics.RAZON_SOCIAL_FRYEN;
+                break;
+            case "armo":
+                rSOCIAL = statics.RAZON_SOCIAL_ARMO;
+                break;
+            case "igloo":
+                rSOCIAL = statics.RAZON_SOCIAL_IGLOO;
+                break;
+            case "ecoenlace":
+                rSOCIAL = statics.RAZON_SOCIAL_ECOENLACE;
+                break;
+
         }
     }
 
