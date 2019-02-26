@@ -15,7 +15,7 @@
     <string name="hint_login_user">Usuario</string>
     <string name="hint_login_pass">Contraseña</string>
 
-    <string name = "text_version_app">Versión: 2.0.5</string>
+    <string name = "text_version_app">Versión: 2.0.6</string>
 
     <string name="txt_rango">Ingresa rango de fecha:</string>
     <string name="txt_fecha_actual">Actividades del día:</string>

@@ -17,7 +17,8 @@ public interface statics {
 
     public static final String NO_PROGRAMADA = "no programada";
 
-    public static final String RAZON_SOCIAL_BONANZA = "TCI Bonanza Choferes";
+    public static final String RAZON_SOCIAL_BONANZA_CHOF = "TCI Bonanza Choferes";
+    public static final String RAZON_SOCIAL_BONANZA = "TCI Bonanza";
     public static final String RAZON_SOCIAL_TCI = "TCI Consultores";
     public static final String RAZON_SOCIAL_AGRO_TRANSPORTES = "TCI Agrotransportes";
     public static final String RAZON_SOCIAL_GRUPO_ARFI = "TCI Arfi";
