@@ -16,6 +16,7 @@ public class Bitacora {
     private String record;
     private String razonSocial;
     private String nombre;
+    private String token;
     private String contacto;
     private String productor;
 
@@ -159,4 +160,11 @@ public class Bitacora {
         this.actividad = actividad;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

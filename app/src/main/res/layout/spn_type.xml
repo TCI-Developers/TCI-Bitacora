@@ -12,7 +12,7 @@
         android:padding="8dp"
         android:text="SELEC. OPC."
         android:textColor="@color/colorAccent"
-        android:textSize="15sp" />
+        android:textSize="18sp" />
 
     <View
         android:layout_width="match_parent"

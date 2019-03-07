@@ -19,16 +19,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.tci.consultoria.tcibitacora.Background.IntentService;
 import com.tci.consultoria.tcibitacora.Controller.AgregarActividad;
 import com.tci.consultoria.tcibitacora.Controller.CargarActividades;
@@ -38,6 +44,7 @@ import com.tci.consultoria.tcibitacora.Modelos.Actividad;
 import com.tci.consultoria.tcibitacora.Singleton.Principal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     private TelephonyManager mTelephony;
@@ -88,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 swipeLoadImei.setRefreshing(false);
             }
         });
+        obtenerToken();
     }
 
     @Override
@@ -269,6 +277,31 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void obtenerToken(){
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+//                        final HashMap<String, Object> productMap = new HashMap<>();
+//                        productMap.put("token",token );
+//                        try {
+//                            p.databaseReference
+//                                    .child("Bitacora")
+//                                    .child(EMPRESA)
+//                                    .child("actividades")
+//                                    .child("usuarios")
+//                                    .child(myIMEI).updateChildren(productMap);
+//                        }catch (Exception e){
+//                        }
+                    }
+                });
     }
 
     public void razonSocial(String empresa){

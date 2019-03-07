@@ -19,6 +19,16 @@ public class Actividad {
     private String contacto;
     private String productor;
     private int status;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     private String url;
     private Double viaticos;
     private int programing;

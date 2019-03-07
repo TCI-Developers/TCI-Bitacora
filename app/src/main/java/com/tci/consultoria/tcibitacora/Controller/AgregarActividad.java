@@ -19,6 +19,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -86,6 +87,7 @@ public class AgregarActividad extends AppCompatActivity {
     TextView txtActividad,txtProgress;
     ProgressBar bar;
     SpinnerOpc spinnerOpc;
+    View viewSeparador;
     PhotoViewAttacher photoViewAttacher = null;
     static final int REQUEST_TAKE_PHOTO = 1;
     private List<opciones> listaOpciones = new ArrayList<opciones>();
@@ -93,6 +95,7 @@ public class AgregarActividad extends AppCompatActivity {
     String nombreActividad="";
     private String downloadImageUrl;
     EditText txtActividadRealizada,txtViaticos,txtNombreActividad;
+    TextInputLayout txtInputNombreActividad;
     Principal p = Principal.getInstance();
     public static String mCurrentPhotoPath="";
     LocationManager manager;
@@ -146,9 +149,11 @@ public class AgregarActividad extends AppCompatActivity {
         });
         txtActividad.setText(nombreActividad);
         if(RECORD !=null){
-            txtNombreActividad.setVisibility(View.GONE);
+            //txtNombreActividad.setVisibility(View.GONE);
+            txtInputNombreActividad.setVisibility(View.GONE);
         }else{
-            txtNombreActividad.setVisibility(View.VISIBLE);
+            //txtNombreActividad.setVisibility(View.VISIBLE);
+            txtInputNombreActividad.setVisibility(View.VISIBLE);
         }
     }
 
@@ -207,6 +212,7 @@ public class AgregarActividad extends AppCompatActivity {
         spnOpcion = findViewById(R.id.spnOpcion);
         llenarSpinner();
         txtActividad = findViewById(R.id.txtActividad);
+        viewSeparador = findViewById(R.id.viewSeparador);
         try{
             nombreActividad = getIntent().getExtras().getString("actividad");
             pos = getIntent().getExtras().getInt("posicion");
@@ -214,11 +220,14 @@ public class AgregarActividad extends AppCompatActivity {
             latlongHUE = getIntent().getExtras().getString("latlonghue");
         }catch (Exception e){
             txtActividad.setVisibility(View.GONE);
+            viewSeparador.setVisibility(View.GONE);
         }
         txtActividadRealizada = findViewById(R.id.txtActividadRealizada);
+
         txtViaticos = findViewById(R.id.txtViaticos);
         txtProgress = findViewById(R.id.txtProgress);
         txtNombreActividad = findViewById(R.id.txtNombreActividad);
+        txtInputNombreActividad = findViewById(R.id.txtInputNombreActividad);
         bar = findViewById(R.id.progSubida);
     }
 
