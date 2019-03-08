@@ -95,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 swipeLoadImei.setRefreshing(false);
             }
         });
-        obtenerToken();
     }
 
     @Override
@@ -254,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
 //                                iniciarUbicacionreal();
 //                        }
                         IMEIVALIDO = true;
+                        if(IMEIVALIDO)
+                            obtenerToken();
                     }
                 }
             }
@@ -280,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void obtenerToken(){
+
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
@@ -289,19 +291,17 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         String token = task.getResult().getToken();
-//                        final HashMap<String, Object> productMap = new HashMap<>();
-//                        productMap.put("token",token );
-//                        try {
-//                            p.databaseReference
-//                                    .child("Bitacora")
-//                                    .child(EMPRESA)
-//                                    .child("actividades")
-//                                    .child("usuarios")
-//                                    .child(myIMEI).updateChildren(productMap);
-//                        }catch (Exception e){
-//                        }
+                        final HashMap<String, Object> productMap = new HashMap<>();
+                        productMap.put("token",token );
+                            p.databaseReference
+                                    .child("Bitacora")
+                                    .child(EMPRESA)
+                                    .child("actividades")
+                                    .child("usuarios")
+                                    .child(myIMEI).updateChildren(productMap);
                     }
                 });
+
     }
 
     public void razonSocial(String empresa){
@@ -410,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     veficaIMEI();
                     validaInternet();
+                        obtenerToken();
                 } else {
                     for(int i =0; i<permissions.length; i++){
                         if(grantResults[i] < 0){
