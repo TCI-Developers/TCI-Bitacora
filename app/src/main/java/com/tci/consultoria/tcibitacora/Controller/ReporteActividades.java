@@ -52,6 +52,8 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.tci.consultoria.tcibitacora.MainActivity.EMPRESA;
 import static com.tci.consultoria.tcibitacora.MainActivity.myIMEI;
@@ -74,7 +76,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     public static int positionAlert;
     public static ArrayList<String> RECORD = new ArrayList<>();
     public static ArrayList<String> UID_BITACORA = new ArrayList<>();
-    hiloprogress hilo;
     private SwipeRefreshLayout swipeLoad;
     private int cont = 0;
     public ProgressDialog progressDoalog;
@@ -144,22 +145,27 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
             case R.id.btn_upload:
                 if(listActividades.size()!=0)  {
                     if(connected) {
-                        progressDoalog.setMessage("Subiendo información....");
-                        progressDoalog.setTitle("Por favor espera!");
-                        progressDoalog.setCancelable(false);
-                        progressDoalog.show();
-                        for(int i = 0; i< RECORD.size(); i++){
-                                for(int j=0;j<imgRUTA.size();j++) {
-                                    if(imgRUTA.get(j) != "") {
+                    progressDoalog.setMessage("Subiendo información....");
+                    progressDoalog.setTitle("Por favor espera!");
+                    progressDoalog.setCancelable(false);
+                    progressDoalog.show();
+
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    executor.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (int i = 0; i < RECORD.size(); i++) {
+                                for (int j = 0; j < imgRUTA.size(); j++) {
+                                    if (!imgRUTA.get(j).isEmpty() && listActividades.get(j).getStatus() != 2) {
                                         subirFotoFirebase(i, j);
-                                    }else if(listActividades.get(j).getStatus()!=2){
-                                        subirsinFoto(i,j);
-                                        listActividades.get(j).setStatus(2);
+                                    } else if (listActividades.get(j).getStatus() != 2) {
+                                        subirsinFoto(i, j);
                                     }
                                 }
+                            }
                         }
+                    });
 
-                        //finish();
                     }else{
                         Toast.makeText(getApplicationContext(), statics.TOAST_VALIDA_INTERNET, Toast.LENGTH_LONG).show();
                     }
@@ -271,6 +277,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                             .child(myIMEI)
                             .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora))
                             .updateChildren(productMap);
+                    listActividades.get(posBitacora).setStatus(2);
                     uploadQuickBase(posBitacora);
                 }
             }
@@ -282,8 +289,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
     }
 
     public void subirFotoFirebase(final int posRecord,final int posBitacora) {
-
-        StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora));
+        final StorageReference path = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
@@ -296,48 +302,46 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         }catch (Exception e){
             //Toast.makeText(getApplicationContext(), statics.ERROR_FOTOGRAFIA, Toast.LENGTH_LONG).show();
         }
-        uploadTask = path.putBytes(data);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //Toast.makeText(MainActivity.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
-                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
-                    {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(ReporteActividades.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
-                            throw task.getException();
-                        }else{
-                            downloadImageUrl = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl().toString();
-                        }
-                        return p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()) {
-                            final HashMap<String, Object> productMap = new HashMap<>();
-                            downloadImageUrl = task.getResult().toString();
-                            // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
-
-                                listActividades.get(posBitacora).setUrl(downloadImageUrl);
-                                productMap.put("url", downloadImageUrl);
-                            productMap.put("status", 2);
-                            p.databaseReference
-                                    .child("Bitacora")
-                                    .child(EMPRESA)
-                                    .child("actividades")
-                                    .child("usuarios")
-                                    .child(myIMEI)
-                                    .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    Bitacora bit = new Bitacora();
-                                    try{
-                                        bit = dataSnapshot.getValue(Bitacora.class);
-                                    }catch (Exception e){}
-                                            if(dataSnapshot.exists() && bit.getStatus()==1){
+        final byte[] finalData = data;
+        p.databaseReference
+                    .child("Bitacora")
+                    .child(EMPRESA)
+                    .child("actividades")
+                    .child("usuarios")
+                    .child(myIMEI)
+                    .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Bitacora bit = new Bitacora();
+                    try{
+                        bit = dataSnapshot.getValue(Bitacora.class);
+                    }catch (Exception e){}
+                    if(dataSnapshot.exists() && bit.getStatus()==1){
+                        uploadTask = path.putBytes(finalData);
+                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                    @Override
+                                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                        if (!task.isSuccessful()) {
+                                            Toast.makeText(ReporteActividades.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                            throw task.getException();
+                                        }else{
+                                            downloadImageUrl = p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl().toString();
+                                        }
+                                        return p.storageRef.child(EMPRESA+"/"+namePhoto.get(posBitacora)).getDownloadUrl();
+                                    }
+                                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            final HashMap<String, Object> productMap = new HashMap<>();
+                                            downloadImageUrl = task.getResult().toString();
+                                            // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
+                                            listActividades.get(posBitacora).setUrl(downloadImageUrl);
+                                            productMap.put("url", downloadImageUrl);
+                                            productMap.put("status", 2);
                                                 p.databaseReference
                                                         .child("Bitacora")
                                                         .child(EMPRESA)
@@ -347,40 +351,42 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                                         .child(RECORD.get(posRecord)).child(UID_BITACORA.get(posBitacora))
                                                         .updateChildren(productMap);
                                                 uploadQuickBase(posBitacora);
-                                            }
-                                }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                listActividades.get(posBitacora).setStatus(2);
+                                            bar.setVisibility(View.GONE);
+                                            bar.setProgress(0);
+                                            progres.setVisibility(View.GONE);
+                                        }else{
+                                            Toast.makeText(ReporteActividades.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {ProgressDialog progressDoalog;
+                                Toast.makeText(ReporteActividades.this, "Error: " + e, Toast.LENGTH_SHORT).show();
+                                Log.e("Error: ", e.toString());
 
-                                }
-                            });
-                            bar.setVisibility(View.GONE);
-                            bar.setProgress(0);
-                            progres.setVisibility(View.GONE);
-                        }else{
-                            Toast.makeText(ReporteActividades.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
-                        }
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                bar.setVisibility(View.VISIBLE);
+                                bar.setProgress((int) progress);
+                                progres.setVisibility(View.VISIBLE);
+                                DecimalFormat format = new DecimalFormat("#.00");
+                                progres.setText(format.format(progress)  + " %");
+                            }
+                        });
                     }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {ProgressDialog progressDoalog;
-                Toast.makeText(ReporteActividades.this, "Error: " + e, Toast.LENGTH_SHORT).show();
-                Log.e("Error: ", e.toString());
+                }
 
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                bar.setVisibility(View.VISIBLE);
-                bar.setProgress((int) progress);
-                progres.setVisibility(View.VISIBLE);
-                DecimalFormat format = new DecimalFormat("#.00");
-                progres.setText(format.format(progress)  + " %");
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
     }
 
     void uploadQuickBase(int position){
@@ -452,23 +458,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
         }
     }
 
-    class hiloprogress extends Thread{
-        public void run(){
-            Looper.prepare();
-            if(!hiloprogress.currentThread().isInterrupted()){
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                            progressDoalog.setMessage("Subiendo información....");
-                            progressDoalog.setTitle("Por favor espera!");
-                            progressDoalog.setCancelable(false);
-                            progressDoalog.show();
-                    }
-                });
-                return;
-            }
-        }
-    }
 
     class CargarDatos extends AsyncTask<String, Void, String> {
 
