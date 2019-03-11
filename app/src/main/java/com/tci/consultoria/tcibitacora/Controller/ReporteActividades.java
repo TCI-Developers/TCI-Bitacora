@@ -149,7 +149,6 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                     progressDoalog.setTitle("Por favor espera!");
                     progressDoalog.setCancelable(false);
                     progressDoalog.show();
-
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     executor.submit(new Runnable() {
                         @Override
@@ -160,6 +159,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                                         subirFotoFirebase(i, j);
                                     } else if (listActividades.get(j).getStatus() != 2) {
                                         subirsinFoto(i, j);
+                                        listActividades.get(j).setStatus(2);
                                     }
                                 }
                             }
