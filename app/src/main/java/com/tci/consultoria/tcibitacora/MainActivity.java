@@ -133,10 +133,11 @@ public class MainActivity extends AppCompatActivity {
         card_AgregarActividad = findViewById(R.id.card_AgregarActividad);
         try {
             EMPRESA = p.firebaseAuth.getCurrentUser().getEmail();
+            int pos = EMPRESA.indexOf("@");
+            EMPRESA = EMPRESA.substring(0,pos);
+            razonSocial(EMPRESA);
         } catch(Exception e){}
-        int pos = EMPRESA.indexOf("@");
-        EMPRESA = EMPRESA.substring(0,pos);
-        razonSocial(EMPRESA);
+
         swipeLoadImei = findViewById(R.id.swipeLoadImei);
     }
 
