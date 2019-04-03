@@ -385,7 +385,9 @@ public class MainActivity extends AppCompatActivity {
             case "ecoenlace":
                 rSOCIAL = statics.RAZON_SOCIAL_ECOENLACE;
                 break;
-
+            case "consorcio":
+                rSOCIAL = statics.RAZON_SOCIAL_CONSORCIO;
+                break;
         }
     }
 

@@ -43,7 +43,7 @@ public interface statics {
     public static final String RAZON_SOCIAL_ARMO = "TCI Armo";
     public static final String RAZON_SOCIAL_IGLOO = "TCI Igloo";
     public static final String RAZON_SOCIAL_ECOENLACE = "TCI Ecoenlace";
-
+    public static final String RAZON_SOCIAL_CONSORCIO = "TCI Consorcio";
 
     public static final String BTN_ALERTDIALOG_CANCELAR = "Cancelar";
     public static final String BTN_ALERTDIALOG_ACTUALIZAR = "Actualizar";
