@@ -388,6 +388,13 @@ public class MainActivity extends AppCompatActivity {
             case "consorcio":
                 rSOCIAL = statics.RAZON_SOCIAL_CONSORCIO;
                 break;
+            case "apeam":
+                rSOCIAL = statics.RAZON_SOCIAL_APEAM;
+                break;
+            case "nutristar":
+                rSOCIAL = statics.RAZON_SOCIAL_Nutristar;
+                break;
+
         }
     }
 
