@@ -402,6 +402,7 @@ public class ReporteActividades extends AppCompatActivity implements AlertUpdate
                 "&_fid_24=" +URLEncoder.encode(listActividades.get(position).getUrl())+// URL de Imagen
                 "&ticket="  +Tiket+
                 "&apptoken=" + statics.tokenTCI;
+            Log.e("URL: ",Query);
         try{
             new CargarDatos().execute(Query.replace(" ", "%20"));
         } catch (Exception e){

@@ -46,6 +46,10 @@ public interface statics {
     public static final String RAZON_SOCIAL_CONSORCIO = "TCI Consorcio";
     public static final String RAZON_SOCIAL_APEAM = "TCI Apeam";
     public static final String RAZON_SOCIAL_Nutristar = "TCI Nutristar";
+    public static final String RAZON_SOCIAL_ARFIREPARTO = "TCI Arfi Reparto";
+    public static final String RAZON_SOCIAL_BONANZACUADRILLAS = "TCI Bonanza Cuadrillas";
+    public static final String RAZON_SOCIAL_BONANZAACOPIO = "TCI Bonanza Acopio";
+
 
     public static final String BTN_ALERTDIALOG_CANCELAR = "Cancelar";
     public static final String BTN_ALERTDIALOG_ACTUALIZAR = "Actualizar";
